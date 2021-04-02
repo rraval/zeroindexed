@@ -1,0 +1,17 @@
+encryptionsalt: v1:Gri3sBCH6Pk=:v1:3G0PuU1eD2IXRLb3:xTV42dY3i2WX5AnSEnFHr41UwaAvKw==
+config:
+  gcp:project: propane-flow-305802
+  gcp:region: us-central1
+  gcp:zone: us-central1-a
+  zeroindexed:clusterName: zeroindexed
+  zeroindexed:shouldImport: "false"
+  zeroindexed:valheimCpu: "4"
+  zeroindexed:valheimIsRunning: "false"
+  zeroindexed:valheimMemory: 4Gi
+  zeroindexed:valheimPassword:
+    secure: v1:JCHrefCbUw+fHGF6:j3Uzj0w5VVrVRV8Hp86bp6JBhh0R+bVQkeLPBvQ=
+  zeroindexed:valheimServerName: ZeroIndexed
+  zeroindexed:valheimTimeZone: America/Toronto
+  zeroindexed:valheimWebhookUrl:
+    secure: v1:m2TduZBnCYY3Ealh:Fy1ByIIj3olP+XkzZpKBih3A6eaYNnPZYY+GbsszgjlzE7h+cs8lcQtGSqFY6Fbg9Zql+QoXIuvAeDHssYYt2CSKnWrJVLFiE1Sr/ol8xdMvcLy1bj0XPa+5B0VP0CIHaU6TI/3DMQaTkABAf6E1mASW6nPKP9wkZgCptAWDUX7IoMnIEJ9Vuw==
+  zeroindexed:valheimWorldName: WarRoom
