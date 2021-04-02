@@ -1,0 +1,61 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: valheim-game
+spec:
+  serviceName: valheim
+  selector:
+    matchLabels:
+      app: valheim-game
+  replicas: 0
+  template:
+    metadata:
+      labels:
+        app: valheim-game
+    spec:
+      containers:
+      - name: game
+        image: ghcr.io/mbround18/valheim:latest
+        env:
+        - name: TZ
+          value: "America/Toronto"
+        - name: NAME
+          value: "ZeroIndexed"
+        - name: WORLD
+          value: "WarRoom"
+        - name: PASSWORD
+          value: "[... redacted ...]"
+        - name: AUTO_BACKUP
+          value: "1"
+        - name: AUTO_BACKUP_ON_UPDATE
+          value: "1"
+        - name: AUTO_BACKUP_ON_SHUTDOWN
+          value: "1"
+        - name: WEBHOOK_URL
+          value: "[... redacted ...]"
+        ports:
+        - containerPort: 2456
+        - containerPort: 2457
+        - containerPort: 2458
+        volumeMounts:
+        - name: config-vol
+          mountPath: /home/steam/.config/unity3d/IronGate/Valheim
+        - name: steam-vol
+          mountPath: /home/steam/valheim
+        - name: backup-vol
+          mountPath: /home/steam/backups
+        resources:
+          requests:
+            cpu: "4"
+            memory: "4Gi"
+      volumes:
+      - name: config-vol
+        persistentVolumeClaim:
+          claimName: valheim-pvc0
+      - name: steam-vol
+        persistentVolumeClaim:
+          claimName: valheim-pvc1
+      - name: backup-vol
+        persistentVolumeClaim:
+          claimName: valheim-pvc2

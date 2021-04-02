@@ -1,0 +1,42 @@
+---
+# Hack to get the volumes mounted in a service that we can `kubectl cp` to
+# initialize
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: valheim-mutator
+spec:
+  serviceName: valheim
+  selector:
+    matchLabels:
+      app: valheim-mutator
+  replicas: 0
+  template:
+    metadata:
+      labels:
+        app: valheim-mutator
+    spec:
+      containers:
+      - name: mutator
+        image: gcr.io/google-samples/hello-app:1.0
+        volumeMounts:
+        - name: config-vol
+          mountPath: /mnt/config
+        - name: steam-vol
+          mountPath: /mnt/steam
+        - name: backup-vol
+          mountPath: /mnt/backup
+        resources:
+          requests:
+            cpu: 250m
+      volumes:
+      - name: config-vol
+        persistentVolumeClaim:
+          claimName: valheim-pvc0
+      - name: steam-vol
+        persistentVolumeClaim:
+          claimName: valheim-pvc1
+      - name: backup-vol
+        persistentVolumeClaim:
+          claimName: valheim-pvc2
+
