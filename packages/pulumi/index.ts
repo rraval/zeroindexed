@@ -22,6 +22,10 @@ const valheimWorldName = config.require("valheimWorldName");
 const valheimPassword = config.requireSecret("valheimPassword");
 const valheimWebhookUrl = config.getSecret("valheimWebhookUrl");
 
+// We manually created disks and the cluster outside of Pulumi.
+//
+// Always protect those resources to prevent automatic deletion. Set things up
+// for a one time import.
 function optionallyImport(importName: string): pulumi.CustomResourceOptions {
     const opts: pulumi.CustomResourceOptions = {protect: true};
     if (shouldImport) {

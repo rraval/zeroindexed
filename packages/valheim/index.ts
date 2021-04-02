@@ -1,11 +1,20 @@
 import * as k8s from "@pulumi/kubernetes";
 import * as pulumi from "@pulumi/pulumi";
 
+/**
+ * A cloud independent way of specifying a persistent volume.
+ *
+ * ZeroIndexed uses gcePersistentDisk but you don't have to.
+ */
 export type ValheimPersistentVolumeFactory = (
     name: string,
     opts?: pulumi.ComponentResourceOptions,
 ) => k8s.core.v1.PersistentVolume;
 
+/**
+ * Some form of persistent disk. We map these to explicit PersistentVolume and
+ * PersistentVolumeClaim resources for the cluster.
+ */
 class ValheimDisk extends pulumi.ComponentResource {
     readonly persistentVolume: k8s.core.v1.PersistentVolume;
     readonly persistentVolumeClaim: k8s.core.v1.PersistentVolumeClaim;
@@ -42,6 +51,10 @@ class ValheimDisk extends pulumi.ComponentResource {
     }
 }
 
+/**
+ * A Valheim game server, implemented as a StatefulSet mapped to a LoadBalancer
+ * service.
+ */
 export class ValheimServer extends pulumi.ComponentResource {
     readonly configDisk: ValheimDisk;
     readonly steamDisk: ValheimDisk;
@@ -54,17 +67,75 @@ export class ValheimServer extends pulumi.ComponentResource {
     public constructor(
         name: string,
         props: {
+            /** Persistent disk for live game data. ~2G is probably good enough. */
             configVolumeFactory: ValheimPersistentVolumeFactory;
+
+            /** Persistent disk for Steam game files. ~10G is probably good enough. */
             steamVolumeFactory: ValheimPersistentVolumeFactory;
+
+            /**
+             * Persistent disk for backups of game data.
+             *
+             * Optional but recommended. ~10G is probably good enough.
+             */
             backupVolumeFactory?: ValheimPersistentVolumeFactory;
+
+            /**
+             * We support turning the game server off to save money.
+             *
+             * FIXME: booting up the server requires cluster access and is
+             * janky. Build some cloud function nonsense to wrap scaling and
+             * status into a web UI.
+             */
             isRunning: pulumi.Input<boolean>;
+
+            /**
+             * IP address for the game server.
+             */
             ip: pulumi.Input<string>;
+
+            /**
+             * CPU request for the container, in "cpu units":
+             * https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#meaning-of-cpu
+             *
+             * 4 CPUs seems like overkill:
+             * https://www.reddit.com/r/valheim/comments/lcg8xk/dedicated_server_requirements/
+             */
             cpu: pulumi.Input<string>;
+
+            /**
+             * Memory request for the container, in bytes or standard prefixes:
+             * https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#meaning-of-memory
+             *
+             * 4Gi seems about right:
+             * https://www.reddit.com/r/valheim/comments/lcg8xk/dedicated_server_requirements/
+             */
             memory: pulumi.Input<string>;
+
+            /** Should be a name from the TZ database, like `America/Toronto` */
             timeZone: pulumi.Input<string>;
+
+            /** Displayed by the server search UI in game. */
             serverName: pulumi.Input<string>;
+
+            /**
+             * Influences the filename used to represent the game data for a server.
+             *
+             * Specifying `foo` here will use the `worlds/foo.db` and
+             * `worlds/foo.fwl` files from `configVolumeFactory`.
+             */
             worldName: pulumi.Input<string>;
+
+            /**
+             * In game password for joining a server.
+             */
             password: pulumi.Input<string>;
+
+            /**
+             * Announces server status via Discord.
+             *
+             * https://github.com/mbround18/valheim-docker/blob/main/docs/webhooks.md
+             */
             webhookUrl?: pulumi.Input<string>;
         },
         opts?: pulumi.ComponentResourceOptions,
