@@ -45,7 +45,7 @@ class ValheimDisk extends pulumi.ComponentResource {
 export class ValheimServer extends pulumi.ComponentResource {
     readonly configDisk: ValheimDisk;
     readonly steamDisk: ValheimDisk;
-    readonly backupDisk: ValheimDisk;
+    readonly backupDisk: ValheimDisk | undefined;
 
     readonly secret: k8s.core.v1.Secret;
     readonly service: k8s.core.v1.Service;
@@ -56,7 +56,7 @@ export class ValheimServer extends pulumi.ComponentResource {
         props: {
             configVolumeFactory: ValheimPersistentVolumeFactory;
             steamVolumeFactory: ValheimPersistentVolumeFactory;
-            backupVolumeFactory: ValheimPersistentVolumeFactory;
+            backupVolumeFactory?: ValheimPersistentVolumeFactory;
             isRunning: pulumi.Input<boolean>;
             ip: pulumi.Input<string>;
             cpu: pulumi.Input<string>;
@@ -79,9 +79,15 @@ export class ValheimServer extends pulumi.ComponentResource {
             parent: this,
         });
 
-        this.backupDisk = new ValheimDisk("valheim-backup", props.backupVolumeFactory, {
-            parent: this,
-        });
+        if (props.backupVolumeFactory !== undefined) {
+            this.backupDisk = new ValheimDisk(
+                "valheim-backup",
+                props.backupVolumeFactory,
+                {
+                    parent: this,
+                },
+            );
+        }
 
         const labels = {
             "app.kubernetes.io/name": "valheim",
@@ -139,7 +145,11 @@ export class ValheimServer extends pulumi.ComponentResource {
             },
         );
 
-        const persistence = [
+        const persistence: Array<{
+            name: string;
+            mountPath: string;
+            disk: ValheimDisk;
+        }> = [
             {
                 name: "config",
                 mountPath: "/home/steam/.config/unity3d/IronGate/Valheim",
@@ -150,12 +160,17 @@ export class ValheimServer extends pulumi.ComponentResource {
                 mountPath: "/home/steam/valheim",
                 disk: this.steamDisk,
             },
-            {
+        ];
+
+        if (this.backupDisk !== undefined) {
+            persistence.push({
                 name: "backup",
                 mountPath: "/home/steam/backups",
                 disk: this.backupDisk,
-            },
-        ];
+            });
+        }
+
+        const enableBackups = this.backupDisk !== undefined ? "1" : "0";
 
         const env = [
             {
@@ -191,15 +206,15 @@ export class ValheimServer extends pulumi.ComponentResource {
             },
             {
                 name: "AUTO_BACKUP",
-                value: "1",
+                value: enableBackups,
             },
             {
                 name: "AUTO_BACKUP_ON_UPDATE",
-                value: "1",
+                value: enableBackups,
             },
             {
                 name: "AUTO_BACKUP_ON_SHUTDOWN",
-                value: "1",
+                value: enableBackups,
             },
         ];
 
