@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+        "target": "ES6",
+        "noEmit": true,
+        "noErrorTruncation": true,
+        "lib": [],
+        "types": [],
+        "moduleResolution": "node",
+        "experimentalDecorators": true,
+
+        "strict": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noPropertyAccessFromIndexSignature": true,
+        "strictBindCallApply": true,
+        "strictFunctionTypes": true,
+        "strictNullChecks": true,
+        "strictPropertyInitialization": true,
+        "alwaysStrict": true,
+
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+
+        "importsNotUsedAsValues": "error",
+        "forceConsistentCasingInFileNames": true
+    }
+}

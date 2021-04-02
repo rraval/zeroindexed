@@ -1,8 +1,7 @@
 import * as gcp from "@pulumi/gcp";
 import * as k8s from "@pulumi/kubernetes";
 import * as pulumi from "@pulumi/pulumi";
-
-import { ValheimServer, ValheimPersistentVolumeFactory } from "./valheim";
+import {ValheimServer, ValheimPersistentVolumeFactory} from "@zeroindexed/valheim";
 
 const gcpConfig = new pulumi.Config("gcp");
 const config = new pulumi.Config();
@@ -52,8 +51,8 @@ const cluster = new gcp.container.Cluster(
 
 // Create a Kubernetes provider instance that uses our cluster from above.
 const clusterProvider = new k8s.Provider(clusterName, {
-    kubeconfig:
-        pulumi.all([cluster.name, cluster.endpoint, cluster.masterAuth])
+    kubeconfig: pulumi
+        .all([cluster.name, cluster.endpoint, cluster.masterAuth])
         .apply(([name, endpoint, masterAuth]) => {
             const context = `${gcp.config.project}_${gcp.config.zone}_${name}`;
             return `apiVersion: v1
@@ -81,7 +80,7 @@ users:
         token-key: '{.credential.access_token}'
       name: gcp
 `;
-        })
+        }),
 });
 
 const valheimIp = new gcp.compute.Address("valheim-ip");
@@ -90,7 +89,7 @@ function makeVolumeFactory(name: string): ValheimPersistentVolumeFactory {
     const gcpDisk = new gcp.compute.Disk(
         name,
         {
-            "interface": "SCSI",
+            interface: "SCSI",
             name,
             type: "pd-balanced",
             size: 10, // GB
@@ -122,21 +121,25 @@ function makeVolumeFactory(name: string): ValheimPersistentVolumeFactory {
     };
 }
 
-const valheim = new ValheimServer("valheim", {
-    configVolumeFactory: makeVolumeFactory("valheim-pd0"),
-    steamVolumeFactory: makeVolumeFactory("valheim-pd1"),
-    backupVolumeFactory: makeVolumeFactory("valheim-pd2"),
-    ip: valheimIp.address,
-    isRunning: valheimIsRunning,
-    cpu: valheimCpu,
-    memory: valheimMemory,
-    timeZone: valheimTimeZone,
-    serverName: valheimServerName,
-    worldName: valheimWorldName,
-    password: valheimPassword,
-    webhookUrl: valheimWebhookUrl,
-}, {
-    provider: clusterProvider,
-});
+const _valheim = new ValheimServer(
+    "valheim",
+    {
+        configVolumeFactory: makeVolumeFactory("valheim-pd0"),
+        steamVolumeFactory: makeVolumeFactory("valheim-pd1"),
+        backupVolumeFactory: makeVolumeFactory("valheim-pd2"),
+        ip: valheimIp.address,
+        isRunning: valheimIsRunning,
+        cpu: valheimCpu,
+        memory: valheimMemory,
+        timeZone: valheimTimeZone,
+        serverName: valheimServerName,
+        worldName: valheimWorldName,
+        password: valheimPassword,
+        webhookUrl: valheimWebhookUrl,
+    },
+    {
+        provider: clusterProvider,
+    },
+);
 
 // FIXME: push valheim IP address to DNS
