@@ -3,6 +3,7 @@
     "name": "@zeroindexed/pulumi",
     "version": "0.0.0",
     "dependencies": {
+        "@pulumi/cloudflare": "^2.14.2",
         "@pulumi/gcp": "^5.0.0-beta.1",
         "@pulumi/kubernetes": "^3.0.0-beta.1",
         "@pulumi/pulumi": "^2.24.1",

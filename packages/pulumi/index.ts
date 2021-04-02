@@ -1,3 +1,4 @@
+import * as cloudflare from "@pulumi/cloudflare";
 import * as gcp from "@pulumi/gcp";
 import * as k8s from "@pulumi/kubernetes";
 import * as pulumi from "@pulumi/pulumi";
@@ -8,6 +9,7 @@ const config = new pulumi.Config();
 
 const shouldImport = config.requireBoolean("shouldImport");
 const clusterName = config.require("clusterName");
+const cloudflareZoneId = config.require("cloudflareZoneId");
 
 // config.requireObject doesn't actually validate types, so write things out
 // explicitly
@@ -142,4 +144,9 @@ const _valheim = new ValheimServer(
     },
 );
 
-// FIXME: push valheim IP address to DNS
+const _valheimDnsRecord = new cloudflare.Record("valheim", {
+    zoneId: cloudflareZoneId,
+    name: "valheim",
+    value: valheimIp.address,
+    type: "A",
+});
