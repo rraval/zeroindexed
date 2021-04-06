@@ -61,7 +61,8 @@ export class ValheimServer extends pulumi.ComponentResource {
     readonly backupDisk: ValheimDisk | undefined;
 
     readonly secret: k8s.core.v1.Secret;
-    readonly service: k8s.core.v1.Service;
+    readonly gameService: k8s.core.v1.Service;
+    readonly odinService: k8s.core.v1.Service;
     readonly statefulSet: k8s.apps.v1.StatefulSet;
 
     public constructor(
@@ -140,23 +141,25 @@ export class ValheimServer extends pulumi.ComponentResource {
         },
         opts?: pulumi.ComponentResourceOptions,
     ) {
-        super("rrv:valheim:server", name, {}, opts);
+        super("zeroindexed:valheim:server", name, {}, opts);
 
-        this.configDisk = new ValheimDisk("valheim-config", props.configVolumeFactory, {
-            parent: this,
-        });
+        this.configDisk = new ValheimDisk(
+            "valheim-config",
+            props.configVolumeFactory,
+            {parent: this},
+        );
 
-        this.steamDisk = new ValheimDisk("valheim-steam", props.steamVolumeFactory, {
-            parent: this,
-        });
+        this.steamDisk = new ValheimDisk(
+            "valheim-steam",
+            props.steamVolumeFactory,
+            {parent: this},
+        );
 
         if (props.backupVolumeFactory !== undefined) {
             this.backupDisk = new ValheimDisk(
                 "valheim-backup",
                 props.backupVolumeFactory,
-                {
-                    parent: this,
-                },
+                {parent: this},
             );
         }
 
@@ -164,26 +167,29 @@ export class ValheimServer extends pulumi.ComponentResource {
             "app.kubernetes.io/name": "valheim",
         };
 
-        const ports = [2456, 2457, 2458];
+        const odinHttpPort = 8000;
+        const gameUdpPorts = [2456, 2457, 2458];
 
-        this.service = new k8s.core.v1.Service(
-            "valheim",
+        const serviceAnnotations = {
+            // The StatefulSet scales down to 0 replicas, this is the
+            // documented workaround:
+            // https://www.pulumi.com/docs/reference/pkg/kubernetes/core/v1/service/
+            // https://github.com/pulumi/pulumi-kubernetes/pull/703
+            "pulumi.com/skipAwait": "true",
+        };
+
+        this.gameService = new k8s.core.v1.Service(
+            "valheim-game",
             {
                 metadata: {
                     labels,
-                    annotations: {
-                        // This service scales down to 0 replicas, this is the
-                        // documented workaround:
-                        // https://www.pulumi.com/docs/reference/pkg/kubernetes/core/v1/service/
-                        // https://github.com/pulumi/pulumi-kubernetes/pull/703
-                        "pulumi.com/skipAwait": "true",
-                    },
+                    annotations: serviceAnnotations,
                 },
                 spec: {
                     selector: labels,
                     type: "LoadBalancer",
                     loadBalancerIP: props.ip,
-                    ports: ports.map((port, index) => {
+                    ports: gameUdpPorts.map((port, index) => {
                         return {
                             port,
                             protocol: "UDP",
@@ -192,9 +198,28 @@ export class ValheimServer extends pulumi.ComponentResource {
                     }),
                 },
             },
+            {parent: this},
+        );
+
+        this.odinService = new k8s.core.v1.Service(
+            "valheim-odin",
             {
-                parent: this,
+                metadata: {
+                    labels,
+                    annotations: serviceAnnotations,
+                },
+                spec: {
+                    selector: labels,
+                    type: "ClusterIP",
+                    ports: [
+                        {
+                            port: odinHttpPort,
+                            protocol: "TCP",
+                        },
+                    ],
+                },
             },
+            {parent: this},
         );
 
         const secretStringData: {[Key: string]: pulumi.Input<string>} = {
@@ -208,7 +233,9 @@ export class ValheimServer extends pulumi.ComponentResource {
         this.secret = new k8s.core.v1.Secret(
             "valheim",
             {
-                metadata: {labels},
+                metadata: {
+                    labels,
+                },
                 stringData: secretStringData,
             },
             {
@@ -287,6 +314,10 @@ export class ValheimServer extends pulumi.ComponentResource {
                 name: "AUTO_BACKUP_ON_SHUTDOWN",
                 value: enableBackups,
             },
+            {
+                name: "HTTP_PORT",
+                value: `${odinHttpPort}`,
+            },
         ];
 
         this.statefulSet = new k8s.apps.v1.StatefulSet(
@@ -296,7 +327,7 @@ export class ValheimServer extends pulumi.ComponentResource {
                     labels,
                 },
                 spec: {
-                    serviceName: this.service.metadata.name,
+                    serviceName: this.gameService.metadata.name,
                     selector: {
                         matchLabels: labels,
                     },
@@ -312,12 +343,18 @@ export class ValheimServer extends pulumi.ComponentResource {
                                 {
                                     name: "game",
                                     image: "ghcr.io/mbround18/valheim:latest",
-                                    ports: ports.map((port) => {
-                                        return {
-                                            containerPort: port,
-                                            protocol: "UDP",
-                                        };
-                                    }),
+                                    ports: [
+                                        {
+                                            containerPort: odinHttpPort,
+                                            protocol: "TCP",
+                                        },
+                                        ...gameUdpPorts.map((port) => {
+                                            return {
+                                                containerPort: port,
+                                                protocol: "UDP",
+                                            };
+                                        }),
+                                    ],
                                     volumeMounts: persistence.map(
                                         ({name, mountPath}) => {
                                             return {name, mountPath};
