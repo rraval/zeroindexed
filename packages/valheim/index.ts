@@ -24,7 +24,7 @@ class ValheimDisk extends pulumi.ComponentResource {
         persistentVolumeFactory: ValheimPersistentVolumeFactory,
         opts?: pulumi.ComponentResourceOptions,
     ) {
-        super("rrv:valheim:disk", name, {}, opts);
+        super("zeroindexed:valheim:disk", name, {}, opts);
 
         this.persistentVolume = persistentVolumeFactory(name, {
             parent: this,

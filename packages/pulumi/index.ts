@@ -122,7 +122,10 @@ function makeVolumeFactory(name: string): ValheimPersistentVolumeFactory {
                     storageClassName: "standard-rwo",
                 },
             },
-            opts,
+            {
+                ...opts,
+                deleteBeforeReplace: true,
+            },
         );
     };
 }
