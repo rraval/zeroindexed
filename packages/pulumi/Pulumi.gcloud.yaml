@@ -1,5 +1,6 @@
 encryptionsalt: v1:Gri3sBCH6Pk=:v1:3G0PuU1eD2IXRLb3:xTV42dY3i2WX5AnSEnFHr41UwaAvKw==
 config:
+  cloudflare:accountId: 9cf55f79e8bb29b869feaff7c95960a6
   cloudflare:apiToken:
     secure: v1:3MwFsB0PmVoJgIXu:Xsxj4O2K/FmlfkyPQDV3v7zn7UFwhXMrf4nJU3o4Ma3GaKF7acxpaBo52PjpKiTEiYm76Yp5Sps=
   cloudflare:email: ronuk.raval@gmail.com
@@ -7,6 +8,7 @@ config:
   gcp:region: us-central1
   gcp:zone: us-central1-a
   zeroindexed:clusterName: zeroindexed
+  zeroindexed:cloudflareZone: zeroindexed.com
   zeroindexed:cloudflareZoneId: eb5986a524b6f74d162110cd89f815e1
   zeroindexed:shouldImport: "false"
   zeroindexed:valheimCpu: "4"

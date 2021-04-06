@@ -1,12 +1,8 @@
 {
     "extends": "../../tsconfig.json",
     "compilerOptions": {
-        "outDir": "bin",
         "target": "ES2016",
         "lib": ["ES2016"],
-        "module": "commonjs",
-        "sourceMap": true,
         "types": ["@types/node"]
-    },
-    "files": ["index.ts"]
+    }
 }

@@ -1,0 +1,9 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "target": "es2016",
+        "lib": ["es2016", "webworker"],
+        "types": ["@cloudflare/workers-types"]
+    },
+    "files": ["index.ts"]
+}

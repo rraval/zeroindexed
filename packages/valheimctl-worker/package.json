@@ -1,0 +1,19 @@
+{
+    "name": "@zeroindexed/valheimctl-worker",
+    "version": "0.1.0",
+    "description": "Cloudflare worker to query and scale Valheim over the Kubernetes API",
+    "repository": "https://github.com/rraval/zeroindexed",
+    "homepage": "https://github.com/rraval/zeroindexed/packages/valheimctl-worker",
+    "author": "Ronuk Raval <ronuk.raval@gmail.com>",
+    "license": "MIT",
+    "main": "index.ts",
+    "dependencies": {
+        "@cloudflare/workers-types": "^2.2.1",
+        "escape-html-template-tag": "^1.3.0"
+    },
+    "devDependencies": {
+        "@cloudflare/wrangler": "^1.15.0",
+        "ts-loader": "^8.1.0",
+        "webpack": "^5.30.0"
+    }
+}

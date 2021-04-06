@@ -3,12 +3,14 @@ import * as gcp from "@pulumi/gcp";
 import * as k8s from "@pulumi/kubernetes";
 import * as pulumi from "@pulumi/pulumi";
 import {ValheimServer, ValheimPersistentVolumeFactory} from "@zeroindexed/valheim";
+import {ValheimCtl} from "@zeroindexed/valheimctl";
 
 const gcpConfig = new pulumi.Config("gcp");
 const config = new pulumi.Config();
 
 const shouldImport = config.requireBoolean("shouldImport");
 const clusterName = config.require("clusterName");
+const cloudflareZone = config.require("cloudflareZone");
 const cloudflareZoneId = config.require("cloudflareZoneId");
 
 // config.requireObject doesn't actually validate types, so write things out
@@ -130,7 +132,7 @@ function makeVolumeFactory(name: string): ValheimPersistentVolumeFactory {
     };
 }
 
-const _valheim = new ValheimServer(
+const valheim = new ValheimServer(
     "valheim",
     {
         configVolumeFactory: makeVolumeFactory("valheim-pd0"),
@@ -157,3 +159,15 @@ const _valheimDnsRecord = new cloudflare.Record("valheim", {
     value: valheimIp.address,
     type: "A",
 });
+
+const _valheimCtl = new ValheimCtl(
+    "valheim-ctl",
+    {
+        server: valheim,
+        cloudflareZone,
+        cloudflareZoneId,
+        clusterEndpointIp: cluster.endpoint,
+        password: valheimPassword,
+    },
+    {provider: clusterProvider}
+);
