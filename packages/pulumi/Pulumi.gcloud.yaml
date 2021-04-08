@@ -12,7 +12,6 @@ config:
   zeroindexed:cloudflareZoneId: eb5986a524b6f74d162110cd89f815e1
   zeroindexed:shouldImport: "false"
   zeroindexed:valheimCpu: "4"
-  zeroindexed:valheimIsRunning: "false"
   zeroindexed:valheimMemory: 4Gi
   zeroindexed:valheimPassword:
     secure: v1:JCHrefCbUw+fHGF6:j3Uzj0w5VVrVRV8Hp86bp6JBhh0R+bVQkeLPBvQ=

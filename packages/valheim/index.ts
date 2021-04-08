@@ -82,13 +82,16 @@ export class ValheimServer extends pulumi.ComponentResource {
             backupVolumeFactory?: ValheimPersistentVolumeFactory;
 
             /**
-             * We support turning the game server off to save money.
+             * Pass `true` to make `pulumi up` run the game server.
              *
-             * FIXME: booting up the server requires cluster access and is
-             * janky. Build some cloud function nonsense to wrap scaling and
-             * status into a web UI.
+             * Pass `false` (the default) keeps the server off.
+             *
+             * NOTE: `valheimctl` can independently bring the server up or
+             * down. `pulumi` reconciles things by comparing against its own
+             * stack state, not by querying the Kubernetes cluster, so it will
+             * not interfere if the input configuration has not changed.
              */
-            isRunning: pulumi.Input<boolean>;
+            isRunning?: pulumi.Input<boolean>;
 
             /**
              * IP address for the game server.
@@ -331,7 +334,7 @@ export class ValheimServer extends pulumi.ComponentResource {
                     selector: {
                         matchLabels: labels,
                     },
-                    replicas: pulumi.output(props.isRunning).apply((isRunning) => {
+                    replicas: pulumi.output(props.isRunning ?? false).apply((isRunning) => {
                         return isRunning ? 1 : 0;
                     }),
                     template: {

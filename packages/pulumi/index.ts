@@ -15,7 +15,6 @@ const cloudflareZoneId = config.require("cloudflareZoneId");
 
 // config.requireObject doesn't actually validate types, so write things out
 // explicitly
-const valheimIsRunning = config.requireBoolean("valheimIsRunning");
 const valheimCpu = config.require("valheimCpu");
 const valheimMemory = config.require("valheimMemory");
 const valheimTimeZone = config.require("valheimTimeZone");
@@ -139,7 +138,6 @@ const valheim = new ValheimServer(
         steamVolumeFactory: makeVolumeFactory("valheim-pd1"),
         backupVolumeFactory: makeVolumeFactory("valheim-pd2"),
         ip: valheimIp.address,
-        isRunning: valheimIsRunning,
         cpu: valheimCpu,
         memory: valheimMemory,
         timeZone: valheimTimeZone,
