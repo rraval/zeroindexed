@@ -73,12 +73,17 @@ export class ValheimCtl extends pulumi.ComponentResource {
             cloudflareZoneId,
             clusterEndpointIp,
             password,
+            idleShutdown,
         }: {
             server: ValheimServer;
             cloudflareZone: pulumi.Input<string>;
             cloudflareZoneId: pulumi.Input<string>;
             clusterEndpointIp: pulumi.Input<string>;
             password: pulumi.Input<string>;
+            idleShutdown?: {
+                schedule: pulumi.Input<string>;
+                afterMs: pulumi.Input<number>;
+            };
         },
         opts?: pulumi.ComponentResourceOptions,
     ) {
@@ -179,10 +184,51 @@ export class ValheimCtl extends pulumi.ComponentResource {
                 value: "100::",
                 proxied: true,
             },
-            {
-                parent: this,
-            },
+            {parent: this},
         );
+
+        const plainTextBindings: Array<cloudflare.types.input.WorkerScriptPlainTextBinding> = [
+            {
+                name: "VALHEIMCTL_K8S_GATEWAY",
+                text: makeUrl("valheimctl-k8s", cloudflareZone),
+            },
+            {
+                name: "VALHEIMCTL_NAMESPACE",
+                text: server.statefulSet.metadata.namespace,
+            },
+            {
+                name: "VALHEIMCTL_STATEFUL_SET_NAME",
+                text: server.statefulSet.metadata.name,
+            },
+            {
+                name: "VALHEIMCTL_POD_NAME",
+                text: podName,
+            },
+            {
+                name: "VALHEIMCTL_ODIN_NAME",
+                text: server.odinService.metadata.name,
+            },
+        ];
+
+        const kvNamespaceBindings: Array<cloudflare.types.input.WorkerScriptKvNamespaceBinding> = [];
+
+        if (idleShutdown != null) {
+            plainTextBindings.push({
+                name: "VALHEIMCTL_IDLE_SHUTDOWN_AFTER_MS",
+                text: pulumi.concat(idleShutdown.afterMs),
+            });
+
+            const kv = new cloudflare.WorkersKvNamespace(
+                "valheimctl-idle_shutdown",
+                {title: "valheimctl-idle_shutdown"},
+                {parent: this},
+            );
+
+            kvNamespaceBindings.push({
+                name: "VALHEIMCTL_KV",
+                namespaceId: kv.id,
+            });
+        }
 
         const workerScript = new cloudflare.WorkerScript(
             "valheimctl",
@@ -192,28 +238,7 @@ export class ValheimCtl extends pulumi.ComponentResource {
                     module: "@zeroindexed/valheimctl-worker",
                     webpackConfigName: "webpack.wrangler.js",
                 }),
-                plainTextBindings: [
-                    {
-                        name: "VALHEIMCTL_K8S_GATEWAY",
-                        text: makeUrl("valheimctl-k8s", cloudflareZone),
-                    },
-                    {
-                        name: "VALHEIMCTL_NAMESPACE",
-                        text: server.statefulSet.metadata.namespace,
-                    },
-                    {
-                        name: "VALHEIMCTL_STATEFUL_SET_NAME",
-                        text: server.statefulSet.metadata.name,
-                    },
-                    {
-                        name: "VALHEIMCTL_POD_NAME",
-                        text: podName,
-                    },
-                    {
-                        name: "VALHEIMCTL_ODIN_NAME",
-                        text: server.odinService.metadata.name,
-                    },
-                ],
+                plainTextBindings,
                 secretTextBindings: [
                     {
                         name: "VALHEIMCTL_K8S_TOKEN",
@@ -224,11 +249,21 @@ export class ValheimCtl extends pulumi.ComponentResource {
                         text: password,
                     },
                 ],
+                kvNamespaceBindings,
             },
-            {
-                parent: this,
-            },
+            {parent: this},
         );
+
+        if (idleShutdown != null) {
+            new cloudflare.WorkerCronTrigger(
+                "valheimctl",
+                {
+                    scriptName: workerScript.name,
+                    schedules: [idleShutdown.schedule],
+                },
+                {parent: this},
+            );
+        }
 
         new cloudflare.WorkerRoute(
             "valheimctl",
@@ -237,9 +272,7 @@ export class ValheimCtl extends pulumi.ComponentResource {
                 pattern: makeUrl("valheimctl", cloudflareZone, "*"),
                 scriptName: workerScript.name,
             },
-            {
-                parent: this,
-            },
+            {parent: this},
         );
     }
 }

@@ -3,6 +3,8 @@ import html from "escape-html-template-tag";
 
 import type {ValheimCtlConfig} from "./config";
 import {StatefulSetState, PodState, OdinState} from "./kubernetes";
+import {OdinObservation} from "./shutdown";
+import {debugRepr} from "./util";
 
 function isTransitioning({
     statefulSetState,
@@ -206,7 +208,9 @@ export async function indexHtml({
                     </div>
                 </div>
 
-                ${debug ? debugHtml({statefulSetState, podState, odinState}) : ""}
+                ${debug
+                    ? await debugHtml({config, statefulSetState, podState, odinState})
+                    : ""}
             </body>
         </html>
     `;
@@ -217,15 +221,21 @@ export async function indexHtml({
     });
 }
 
-function debugHtml({
+async function debugHtml({
+    config,
     statefulSetState,
     podState,
     odinState,
 }: {
+    config: ValheimCtlConfig;
     statefulSetState: StatefulSetState;
     podState: PodState;
     odinState: OdinState;
-}): HtmlSafeString {
+}): Promise<HtmlSafeString> {
+    const shutdownText = await OdinObservation.get(config)
+        .then((observation) => debugRepr(observation))
+        .catch((e) => debugRepr(e));
+
     return html`
         <div id="debug">
             <h1>Debug</h1>
@@ -240,6 +250,10 @@ function debugHtml({
             <details>
                 <summary>Odin</summary>
                 <code>${odinState.response.debugRepr()}</code>
+            </details>
+            <details>
+                <summary>Idle Shutdown</summary>
+                <code>${shutdownText}</code>
             </details>
         </div>
     `;

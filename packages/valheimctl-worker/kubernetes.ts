@@ -93,15 +93,16 @@ export class PodState {
         }
 
         this.response.assertStatus(200);
-        const [
-            containerStatus,
-        ] = (this.response.json() as any)?.status?.containerStatuses;
-        if (containerStatus === undefined) {
+
+        const containerStatuses = (this.response.json() as any)?.status?.containerStatuses;
+        if (containerStatuses === undefined || containerStatuses.length < 1) {
             return {
                 type: "transitioning",
                 info: "Pending",
             };
         }
+
+        const [containerStatus] = containerStatuses;
 
         const waitingReason = containerStatus?.state?.waiting?.reason;
         if (waitingReason !== undefined) {

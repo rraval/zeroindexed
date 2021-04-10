@@ -1,23 +1,16 @@
 import {isAuthorized} from "./auth";
 import {ValheimCtlConfig} from "./config";
 import {scaleStatefulSet} from "./kubernetes";
+import {observeAndPossiblyShutdown} from "./shutdown";
 import {indexHtml} from "./ui";
 import {debugRepr} from "./util";
 
 addEventListener("fetch", (event) => {
     const config = ValheimCtlConfig.fromGlobalThis();
     event.respondWith(
-        handle(config, event.request).catch((e: unknown) => {
-            let text: string;
-
-            if (e instanceof Error) {
-                text = e.stack ?? `${e.name}: ${e.message}`;
-            } else {
-                text = debugRepr(e);
-            }
-
+        onFetch(config, event.request).catch((e: unknown) => {
             return Promise.resolve(
-                new Response(text, {
+                new Response(debugRepr(e), {
                     headers: {
                         "Content-Type": "text/plain; charset=UTF-8",
                     },
@@ -27,7 +20,12 @@ addEventListener("fetch", (event) => {
     );
 });
 
-async function handle(config: ValheimCtlConfig, request: Request): Promise<Response> {
+addEventListener("scheduled", (event) => {
+    const config = ValheimCtlConfig.fromGlobalThis();
+    event.waitUntil(observeAndPossiblyShutdown(config));
+});
+
+async function onFetch(config: ValheimCtlConfig, request: Request): Promise<Response> {
     const {method, headers} = request;
     const url = new URL(request.url);
 

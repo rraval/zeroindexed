@@ -2,6 +2,8 @@ const path = require("path");
 
 module.exports = {
     context: __dirname,
+    mode: "development",
+    devtool: false,
     entry: "./index",
     output: {
         path: path.resolve(__dirname, "dist"),
