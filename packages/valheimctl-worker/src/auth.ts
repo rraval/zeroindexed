@@ -13,7 +13,10 @@ function timingSafeEquals(a: string, b: string): boolean {
     return isEqual;
 }
 
-export function isAuthorized(config: ValheimCtlConfig, authorization: string | null | undefined): boolean {
+export function isAuthorized(
+    config: ValheimCtlConfig,
+    authorization: string | null | undefined,
+): boolean {
     if (authorization == null) {
         return false;
     }

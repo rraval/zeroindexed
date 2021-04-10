@@ -8,8 +8,5 @@
         "module": "commonjs",
         "types": ["@types/node"]
     },
-    "references": [
-        {"path": "../valheim"},
-        {"path": "../valheimctl"}
-    ]
+    "references": [{"path": "../valheim"}, {"path": "../valheimctl"}]
 }

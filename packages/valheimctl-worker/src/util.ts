@@ -14,7 +14,10 @@ export function asString(thing: unknown): string {
     throw new Error(`Expected string, got ${typeof thing} ${debugRepr(thing)}`);
 }
 
-export function asOptional<T>(converter: (thing: unknown) => T, thing: unknown): T | null {
+export function asOptional<T>(
+    converter: (thing: unknown) => T,
+    thing: unknown,
+): T | null {
     if (thing == null) {
         return null;
     }
@@ -39,7 +42,7 @@ export function asNumberString(thing: unknown): number {
     return num;
 }
 
-export function asObject(thing: unknown) : Record<PropertyKey, unknown> {
+export function asObject(thing: unknown): Record<PropertyKey, unknown> {
     if (typeof thing === "object" && thing !== null) {
         // This is a better type than `object`
         return thing as Record<PropertyKey, unknown>;

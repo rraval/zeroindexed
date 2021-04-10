@@ -38,10 +38,13 @@ export const ValheimCtlConfig = {
             podName: asString(env["VALHEIMCTL_POD_NAME"]),
             odinName: asString(env["VALHEIMCTL_ODIN_NAME"]),
             password: asString(env["VALHEIMCTL_PASSWORD"]),
-            idleShutdown: idleShutdownKv == null || idleShutdownAfterMs == null ? null : {
-                kv: asKVNamespace(idleShutdownKv),
-                afterMs: asNumberString(idleShutdownAfterMs),
-            },
+            idleShutdown:
+                idleShutdownKv == null || idleShutdownAfterMs == null
+                    ? null
+                    : {
+                          kv: asKVNamespace(idleShutdownKv),
+                          afterMs: asNumberString(idleShutdownAfterMs),
+                      },
         };
     },
 };

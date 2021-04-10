@@ -173,5 +173,5 @@ const _valheimCtl = new ValheimCtl(
             afterMs: valheimIdleShutdownAfterMs,
         },
     },
-    {provider: clusterProvider}
+    {provider: clusterProvider},
 );

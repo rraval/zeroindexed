@@ -26,7 +26,10 @@ function webpackRun(configuration: webpack.Configuration): Promise<webpack.Stats
     });
 }
 
-export async function webpacker({module, webpackConfigName}: {
+export async function webpacker({
+    module,
+    webpackConfigName,
+}: {
     module: string;
     webpackConfigName: string;
 }): Promise<string> {

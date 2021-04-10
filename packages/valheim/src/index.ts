@@ -146,17 +146,13 @@ export class ValheimServer extends pulumi.ComponentResource {
     ) {
         super("zeroindexed:valheim:server", name, {}, opts);
 
-        this.configDisk = new ValheimDisk(
-            "valheim-config",
-            props.configVolumeFactory,
-            {parent: this},
-        );
+        this.configDisk = new ValheimDisk("valheim-config", props.configVolumeFactory, {
+            parent: this,
+        });
 
-        this.steamDisk = new ValheimDisk(
-            "valheim-steam",
-            props.steamVolumeFactory,
-            {parent: this},
-        );
+        this.steamDisk = new ValheimDisk("valheim-steam", props.steamVolumeFactory, {
+            parent: this,
+        });
 
         if (props.backupVolumeFactory !== undefined) {
             this.backupDisk = new ValheimDisk(
@@ -334,9 +330,11 @@ export class ValheimServer extends pulumi.ComponentResource {
                     selector: {
                         matchLabels: labels,
                     },
-                    replicas: pulumi.output(props.isRunning ?? false).apply((isRunning) => {
-                        return isRunning ? 1 : 0;
-                    }),
+                    replicas: pulumi
+                        .output(props.isRunning ?? false)
+                        .apply((isRunning) => {
+                            return isRunning ? 1 : 0;
+                        }),
                     template: {
                         metadata: {
                             labels,

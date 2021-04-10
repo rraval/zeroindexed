@@ -13,12 +13,14 @@ module.exports = {
         extensions: [".js", ".ts"],
     },
     module: {
-        rules: [{
-            test: /\.ts$/,
-            loader: "ts-loader",
-            options: {
-                transpileOnly: true,
+        rules: [
+            {
+                test: /\.ts$/,
+                loader: "ts-loader",
+                options: {
+                    transpileOnly: true,
+                },
             },
-        }],
+        ],
     },
 };

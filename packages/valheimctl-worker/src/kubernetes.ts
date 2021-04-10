@@ -94,7 +94,8 @@ export class PodState {
 
         this.response.assertStatus(200);
 
-        const containerStatuses = (this.response.json() as any)?.status?.containerStatuses;
+        const containerStatuses = (this.response.json() as any)?.status
+            ?.containerStatuses;
         if (containerStatuses === undefined || containerStatuses.length < 1) {
             return {
                 type: "transitioning",
@@ -204,7 +205,10 @@ export class OdinState {
     }
 }
 
-export async function scaleStatefulSet({config, replicas}: {
+export async function scaleStatefulSet({
+    config,
+    replicas,
+}: {
     config: ValheimCtlConfig;
     replicas: number;
 }): Promise<Response> {
