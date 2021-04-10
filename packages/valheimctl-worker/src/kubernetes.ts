@@ -79,6 +79,11 @@ export type PodStatus = {info: string} & (
     | {type: "running"}
 );
 
+interface UnknownJson {
+    [Key: string]: undefined | UnknownJson;
+    [Key: number]: undefined | UnknownJson;
+}
+
 export class PodState {
     private readonly _nominalHack: unknown;
 
@@ -94,18 +99,22 @@ export class PodState {
 
         this.response.assertStatus(200);
 
-        const containerStatuses = (this.response.json() as any)?.status
-            ?.containerStatuses;
-        if (containerStatuses === undefined || containerStatuses.length < 1) {
+        const containerStatuses = (this.response.json() as UnknownJson)?.["status"]?.[
+            "containerStatuses"
+        ];
+        if (
+            containerStatuses === undefined ||
+            asNumber(containerStatuses["length"]) < 1
+        ) {
             return {
                 type: "transitioning",
                 info: "Pending",
             };
         }
 
-        const [containerStatus] = containerStatuses;
+        const containerStatus = containerStatuses[0];
 
-        const waitingReason = containerStatus?.state?.waiting?.reason;
+        const waitingReason = containerStatus?.["state"]?.["waiting"]?.["reason"];
         if (waitingReason !== undefined) {
             return {
                 type: "transitioning",
@@ -113,7 +122,7 @@ export class PodState {
             };
         }
 
-        const terminatedReason = containerStatus?.state?.terminated?.reason;
+        const terminatedReason = containerStatus?.["state"]?.["terminated"]?.["reason"];
         if (terminatedReason !== undefined) {
             return {
                 type: "transitioning",
@@ -121,7 +130,7 @@ export class PodState {
             };
         }
 
-        const running = containerStatus?.state?.running;
+        const running = containerStatus?.["state"]?.["running"];
         if (running !== undefined) {
             return {
                 type: "running",
@@ -148,11 +157,13 @@ export class StatefulSetState {
     public constructor(public readonly response: KubernetesResponse) {}
 
     public desiredReplicas(): number {
-        return asNumber((this.response.json() as any)?.spec?.replicas);
+        return asNumber((this.response.json() as UnknownJson)?.["spec"]?.["replicas"]);
     }
 
     public runningReplicas(): number {
-        return asNumber((this.response.json() as any)?.status?.replicas);
+        return asNumber(
+            (this.response.json() as UnknownJson)?.["status"]?.["replicas"],
+        );
     }
 
     public static async fromApi(config: ValheimCtlConfig): Promise<StatefulSetState> {
@@ -173,12 +184,12 @@ export class OdinState {
 
     public version(): string {
         this.response.assertStatus(200);
-        return asString((this.response.json() as any)?.version);
+        return asString((this.response.json() as UnknownJson)?.["version"]);
     }
 
     public numPlayers(): number {
         this.response.assertStatus(200);
-        return asNumber((this.response.json() as any)?.players);
+        return asNumber((this.response.json() as UnknownJson)?.["players"]);
     }
 
     public isOnline(): boolean {
