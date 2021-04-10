@@ -1,12 +1,18 @@
 {
     "compilerOptions": {
+        "composite": true,
+        "declaration": true,
+        "declarationMap": true,
+        "sourceMap": true,
+
         "target": "ES6",
-        "noEmit": true,
+        "module": "commonjs",
         "noErrorTruncation": true,
         "lib": [],
         "types": [],
         "moduleResolution": "node",
         "experimentalDecorators": true,
+        "importHelpers": true,
 
         "strict": true,
         "noFallthroughCasesInSwitch": true,

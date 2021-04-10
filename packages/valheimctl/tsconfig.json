@@ -1,8 +1,15 @@
 {
-    "extends": "../../tsconfig.json",
+    "extends": "../tsconfig.json",
     "compilerOptions": {
+        "outDir": "dist",
+        "rootDir": "src",
         "target": "ES2016",
         "lib": ["ES2016"],
         "types": ["@types/node"]
-    }
+    },
+    "references": [
+        {"path": "../valheim"},
+        {"path": "../valheimctl-worker"},
+        {"path": "../webpacker"}
+    ]
 }

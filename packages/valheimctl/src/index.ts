@@ -236,7 +236,7 @@ export class ValheimCtl extends pulumi.ComponentResource {
                 name: "valheimctl",
                 content: webpacker({
                     module: "@zeroindexed/valheimctl-worker",
-                    webpackConfigName: "webpack.wrangler.js",
+                    webpackConfigName: "../webpack.wrangler.js",
                 }),
                 plainTextBindings,
                 secretTextBindings: [

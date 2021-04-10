@@ -1,12 +1,15 @@
 {
-    "extends": "../../tsconfig.json",
+    "extends": "../tsconfig.json",
     "compilerOptions": {
-        "outDir": "bin",
+        "outDir": "dist",
+        "rootDir": "src",
         "target": "ES2016",
         "lib": ["ES2016"],
         "module": "commonjs",
-        "sourceMap": true,
         "types": ["@types/node"]
     },
-    "files": ["index.ts"]
+    "references": [
+        {"path": "../valheim"},
+        {"path": "../valheimctl"}
+    ]
 }

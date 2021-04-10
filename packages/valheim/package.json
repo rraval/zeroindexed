@@ -6,8 +6,17 @@
     "homepage": "https://github.com/rraval/zeroindexed/packages/valheim",
     "author": "Ronuk Raval <ronuk.raval@gmail.com>",
     "license": "MIT",
+    "main": "dist/index.js",
+    "typings": "dist/index.d.js",
     "dependencies": {
         "@pulumi/kubernetes": "^3.0.0-beta.1",
         "@pulumi/pulumi": "^2.24.1"
+    },
+    "scripts": {
+        "prepublishOnly": "tsc -b ."
+    },
+    "devDependencies": {
+        "tslib": "^2.2.0",
+        "typescript": "^4.2.4"
     }
 }

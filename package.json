@@ -6,11 +6,8 @@
     "scripts": {
         "lint": "prettier --check .; eslint --ext .ts,.tsx .",
         "preview": "cd packages/pulumi && pulumi preview",
-        "ts": "bash -c 'for pkg in packages/*; do yarn tsc --noEmit -p $pkg; done'",
+        "ts": "lerna exec -- yarn run tsc -b .",
         "up": "cd packages/pulumi && pulumi up"
-    },
-    "dependencies": {
-        "typescript": "^4.2.3"
     },
     "devDependencies": {
         "@typescript-eslint/eslint-plugin": "^4.20.0",
@@ -18,12 +15,15 @@
         "eslint": "^7.23.0",
         "eslint-config-prettier": "^8.1.0",
         "eslint-plugin-import": "^2.22.1",
-        "prettier": "^2.2.1"
+        "lerna": "^4.0.0",
+        "prettier": "^2.2.1",
+        "typescript": "^4.2.4"
     },
     "prettier": {
         "bracketSpacing": false,
         "printWidth": 88,
         "tabWidth": 4,
         "trailingComma": "all"
-    }
+    },
+    "name": "zeroindexed"
 }

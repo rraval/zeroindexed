@@ -1,4 +1,5 @@
-/TODO.md
+/packages/*/dist
+/packages/*/tsconfig.tsbuildinfo
 
 node_modules
 yarn-error.log

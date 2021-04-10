@@ -4,9 +4,9 @@ module.exports = {
     context: __dirname,
     mode: "development",
     devtool: false,
-    entry: "./index",
+    entry: "./src",
     output: {
-        path: path.resolve(__dirname, "dist"),
+        path: path.resolve(__dirname, "worker"),
         filename: "worker.js",
     },
     resolve: {

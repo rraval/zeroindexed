@@ -6,11 +6,16 @@
     "homepage": "https://github.com/rraval/zeroindexed/packages/webpacker",
     "author": "Ronuk Raval <ronuk.raval@gmail.com>",
     "license": "MIT",
+    "main": "dist/index.js",
+    "typings": "dist/index.d.js",
     "dependencies": {
-        "ts-loader": "^8.1.0",
         "webpack": "^5.30.0"
     },
     "devDependencies": {
-        "ts-node": "^9.1.1"
+        "tslib": "^2.2.0",
+        "typescript": "^4.2.4"
+    },
+    "scripts": {
+        "prepublishOnly": "tsc -b ."
     }
 }
