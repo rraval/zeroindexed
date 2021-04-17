@@ -13,6 +13,7 @@
         "moduleResolution": "node",
         "experimentalDecorators": true,
         "importHelpers": true,
+        "isolatedModules": true,
 
         "strict": true,
         "noFallthroughCasesInSwitch": true,
