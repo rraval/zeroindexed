@@ -12,8 +12,6 @@ config:
   zeroindexed:clusterName: zeroindexed
   zeroindexed:shouldImport: "false"
   zeroindexed:valheimCpu: "4"
-  zeroindexed:valheimIdleShutdownAfterMs: 600000
-  zeroindexed:valheimIdleShutdownSchedule: '*/5 * * * *'
   zeroindexed:valheimMemory: 4Gi
   zeroindexed:valheimPassword:
     secure: v1:JCHrefCbUw+fHGF6:j3Uzj0w5VVrVRV8Hp86bp6JBhh0R+bVQkeLPBvQ=

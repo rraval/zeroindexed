@@ -1,0 +1,22 @@
+{
+    "name": "@zeroindexed/cloudflare-kv-log",
+    "version": "0.1.0",
+    "description": "Minimal logging backed by Cloudflare workers KV",
+    "repository": "https://github.com/rraval/zeroindexed",
+    "homepage": "https://github.com/rraval/zeroindexed/packages/cloudflare-kv-log",
+    "author": "Ronuk Raval <ronuk.raval@gmail.com>",
+    "license": "MIT",
+    "main": "dist/index.js",
+    "typings": "dist/index.d.js",
+    "dependencies": {
+        "@cfworker/uuid": "^1.6.11",
+        "@cloudflare/workers-types": "^2.2.1"
+    },
+    "devDependencies": {
+        "tslib": "^2.2.0",
+        "typescript": "^4.2.4"
+    },
+    "scripts": {
+        "prepublishOnly": "tsc -b ."
+    }
+}

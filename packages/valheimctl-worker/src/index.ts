@@ -47,12 +47,22 @@ async function onFetch(config: ValheimCtlConfig, request: Request): Promise<Resp
         });
     }
 
+    const actor = headers.get("CF-Connecting-IP") ?? "Unknown IP";
+
     if (method === "POST" && url.pathname === "/start") {
-        return scaleStatefulSet({config, replicas: 1});
+        const [, response] = await Promise.all([
+            config.actorLogger?.log(`${actor} started the server`),
+            scaleStatefulSet({config, replicas: 1}),
+        ]);
+        return response;
     }
 
     if (method === "POST" && url.pathname === "/stop") {
-        return scaleStatefulSet({config, replicas: 0});
+        const [, response] = await Promise.all([
+            config.actorLogger?.log(`${actor} stopped the server`),
+            scaleStatefulSet({config, replicas: 0}),
+        ]);
+        return response;
     }
 
     return Promise.resolve(new Response("", {status: 404}));

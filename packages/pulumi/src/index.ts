@@ -22,8 +22,6 @@ const valheimServerName = config.require("valheimServerName");
 const valheimWorldName = config.require("valheimWorldName");
 const valheimPassword = config.requireSecret("valheimPassword");
 const valheimWebhookUrl = config.getSecret("valheimWebhookUrl");
-const valheimIdleShutdownSchedule = config.require("valheimIdleShutdownSchedule");
-const valheimIdleShutdownAfterMs = config.requireNumber("valheimIdleShutdownAfterMs");
 
 // We manually created disks and the cluster outside of Pulumi.
 //
@@ -168,9 +166,11 @@ const _valheimCtl = new ValheimCtl(
         cloudflareZoneId,
         clusterEndpointIp: cluster.endpoint,
         password: valheimPassword,
+        actorLogTtl: 60 * 60 * 24, // 24 hours
         idleShutdown: {
-            schedule: valheimIdleShutdownSchedule,
-            afterMs: valheimIdleShutdownAfterMs,
+            schedule: "*/5 * * * *", // check every 5 minutes
+            after: 60 * 10, // shut down after 10 minutes idle
+            logTtl: 60 * 60, // 1 hour
         },
     },
     {provider: clusterProvider},

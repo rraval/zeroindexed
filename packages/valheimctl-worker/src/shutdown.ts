@@ -1,8 +1,7 @@
 import type {ValheimCtlConfig} from "./config";
 import {OdinState, scaleStatefulSet} from "./kubernetes";
+import {KV} from "./kv";
 import {asNumber, asObject, asOptional} from "./util";
-
-const KEY = "OdinObservation";
 
 export interface OdinObservation {
     instant: number;
@@ -11,7 +10,7 @@ export interface OdinObservation {
 
 export const OdinObservation = {
     async get(config: ValheimCtlConfig): Promise<OdinObservation | null> {
-        const json = await config.kv.get(KEY);
+        const json = await config.kv.get(KV.odinObservation);
         if (json == null) {
             return null;
         }
@@ -24,7 +23,7 @@ export const OdinObservation = {
     },
 
     async put(config: ValheimCtlConfig, observation: OdinObservation): Promise<void> {
-        await config.kv.put(KEY, JSON.stringify(observation));
+        await config.kv.put(KV.odinObservation, JSON.stringify(observation));
     },
 
     async observe(config: ValheimCtlConfig): Promise<OdinObservation> {
@@ -69,14 +68,17 @@ function shouldShutdown({
     observation: OdinObservation;
     timeout: number;
 }): boolean {
-    return observation.numPlayers != null && Date.now() - observation.instant > timeout;
+    return (
+        observation.numPlayers != null &&
+        Date.now() - observation.instant > timeout * 1000
+    );
 }
 
 export async function observeAndPossiblyShutdown(
     config: ValheimCtlConfig,
 ): Promise<void> {
-    const {idleShutdownAfterMs} = config;
-    if (idleShutdownAfterMs == null) {
+    const {idleShutdownAfter} = config;
+    if (idleShutdownAfter == null) {
         throw new Error("Shutdown not configured");
     }
 
@@ -91,17 +93,25 @@ export async function observeAndPossiblyShutdown(
     });
 
     const pending: Array<Promise<unknown>> = [];
+    const log = (message: string): void => {
+        const promise = config.idleShutdownLogger?.log(message);
+        if (promise != null) {
+            pending.push(promise);
+        }
+    };
 
     if (combined.hasChanged) {
+        log(`Observed ${combined.observation.numPlayers} players`);
         pending.push(OdinObservation.put(config, combined.observation));
     }
 
     if (
         shouldShutdown({
             observation: combined.observation,
-            timeout: idleShutdownAfterMs,
+            timeout: idleShutdownAfter,
         })
     ) {
+        log(`Server has been idle for ${idleShutdownAfter}s, shutting down`);
         pending.push(scaleStatefulSet({config, replicas: 0}));
     }
 

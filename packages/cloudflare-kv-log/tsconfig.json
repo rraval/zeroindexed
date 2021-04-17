@@ -6,6 +6,5 @@
         "target": "es2016",
         "lib": ["es2016", "webworker"],
         "types": ["@cloudflare/workers-types"]
-    },
-    "references": [{"path": "../cloudflare-kv-log"}]
+    }
 }

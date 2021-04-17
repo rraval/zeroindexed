@@ -73,6 +73,7 @@ export class ValheimCtl extends pulumi.ComponentResource {
             cloudflareZoneId,
             clusterEndpointIp,
             password,
+            actorLogTtl,
             idleShutdown,
         }: {
             server: ValheimServer;
@@ -80,9 +81,11 @@ export class ValheimCtl extends pulumi.ComponentResource {
             cloudflareZoneId: pulumi.Input<string>;
             clusterEndpointIp: pulumi.Input<string>;
             password: pulumi.Input<string>;
+            actorLogTtl?: pulumi.Input<number>;
             idleShutdown?: {
                 schedule: pulumi.Input<string>;
-                afterMs: pulumi.Input<number>;
+                after: pulumi.Input<number>;
+                logTtl?: pulumi.Input<number>;
             };
         },
         opts?: pulumi.ComponentResourceOptions,
@@ -222,11 +225,25 @@ export class ValheimCtl extends pulumi.ComponentResource {
             },
         ];
 
+        if (actorLogTtl != null) {
+            plainTextBindings.push({
+                name: "VALHEIMCTL_ACTOR_LOG_TTL",
+                text: pulumi.concat(actorLogTtl),
+            });
+        }
+
         if (idleShutdown != null) {
             plainTextBindings.push({
-                name: "VALHEIMCTL_IDLE_SHUTDOWN_AFTER_MS",
-                text: pulumi.concat(idleShutdown.afterMs),
+                name: "VALHEIMCTL_IDLE_SHUTDOWN_AFTER",
+                text: pulumi.concat(idleShutdown.after),
             });
+
+            if (idleShutdown.logTtl != null) {
+                plainTextBindings.push({
+                    name: "VALHEIMCTL_IDLE_SHUTDOWN_LOG_TTL",
+                    text: pulumi.concat(idleShutdown.logTtl),
+                });
+            }
         }
 
         const workerScript = new cloudflare.WorkerScript(
