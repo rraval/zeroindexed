@@ -1,6 +1,7 @@
 import * as cloudflare from "@pulumi/cloudflare";
 import * as k8s from "@pulumi/kubernetes";
 import * as pulumi from "@pulumi/pulumi";
+import {ExternalServiceAccount} from "@zeroindexed/k8s-external-service-account";
 import type {ValheimServer} from "@zeroindexed/valheim";
 import {webpacker} from "@zeroindexed/webpacker";
 
@@ -90,7 +91,7 @@ export class ValheimCtl extends pulumi.ComponentResource {
         },
         opts?: pulumi.ComponentResourceOptions,
     ) {
-        super("zeroindexed:valheimctl:ctl", name, {}, opts);
+        super("zeroindexed:valheimctl", name, {}, opts);
 
         const metadata = {
             labels: {
@@ -98,36 +99,16 @@ export class ValheimCtl extends pulumi.ComponentResource {
             },
         };
 
-        const serviceAccount = new k8s.core.v1.ServiceAccount(
+        const serviceAccount = new ExternalServiceAccount(
             "valheimctl",
             {metadata},
             {parent: this},
         );
 
-        const serviceAccountTokenSecret = k8s.core.v1.Secret.get(
-            "valheimctl-token",
-            serviceAccount.secrets.apply((secretArray) => {
-                if (secretArray.length !== 1) {
-                    throw new Error(
-                        `Expected just a single secret token, got: ${secretArray.length}`,
-                    );
-                }
-
-                return secretArray[0].name;
-            }),
-            {parent: this},
-        );
-
-        const serviceAccountToken = serviceAccountTokenSecret.data["token"].apply(
-            (encodedSecretToken) => {
-                return Buffer.from(encodedSecretToken, "base64").toString("utf8");
-            },
-        );
-
         makeRoleAndBinding({
             name: "valheimctl-odin-proxy",
             metadata,
-            serviceAccountName: serviceAccount.metadata.name,
+            serviceAccountName: serviceAccount.account.metadata.name,
             apiGroups: [""],
             resources: ["services/proxy"],
             resourceNames: [server.odinService.metadata.name],
@@ -140,7 +121,7 @@ export class ValheimCtl extends pulumi.ComponentResource {
         makeRoleAndBinding({
             name: "valheimctl-pod-get",
             metadata,
-            serviceAccountName: serviceAccount.metadata.name,
+            serviceAccountName: serviceAccount.account.metadata.name,
             apiGroups: [""],
             resources: ["pods"],
             resourceNames: [podName],
@@ -151,7 +132,7 @@ export class ValheimCtl extends pulumi.ComponentResource {
         makeRoleAndBinding({
             name: "valheimctl-statefulset-get",
             metadata,
-            serviceAccountName: serviceAccount.metadata.name,
+            serviceAccountName: serviceAccount.account.metadata.name,
             apiGroups: ["apps"],
             resources: ["statefulsets"],
             resourceNames: [server.statefulSet.metadata.name],
@@ -162,7 +143,7 @@ export class ValheimCtl extends pulumi.ComponentResource {
         makeRoleAndBinding({
             name: "valheimctl-statefulset-scale",
             metadata,
-            serviceAccountName: serviceAccount.metadata.name,
+            serviceAccountName: serviceAccount.account.metadata.name,
             apiGroups: ["apps"],
             resources: ["statefulsets/scale"],
             resourceNames: [server.statefulSet.metadata.name],
@@ -258,7 +239,7 @@ export class ValheimCtl extends pulumi.ComponentResource {
                 secretTextBindings: [
                     {
                         name: "VALHEIMCTL_K8S_TOKEN",
-                        text: serviceAccountToken,
+                        text: serviceAccount.token,
                     },
                     {
                         name: "VALHEIMCTL_PASSWORD",

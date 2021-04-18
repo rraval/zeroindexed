@@ -1,22 +1,20 @@
 {
-    "name": "@zeroindexed/valheimctl",
+    "name": "@zeroindexed/k8s-external-service-account",
     "version": "0.1.0",
-    "description": "Static site web UI to control Valheim backed by Cloudflare workers",
+    "description": "Pulumi component to export Kubernetes service account tokens for out of cluster use",
     "repository": "https://github.com/rraval/zeroindexed",
-    "homepage": "https://github.com/rraval/zeroindexed/packages/valheimctl",
+    "homepage": "https://github.com/rraval/zeroindexed/packages/k8s-external-service-account",
     "author": "Ronuk Raval <ronuk.raval@gmail.com>",
     "license": "MIT",
     "main": "dist/index.js",
     "typings": "dist/index.d.js",
+    "files": [
+        "dist/*"
+    ],
     "dependencies": {
-        "@pulumi/cloudflare": "^2.14.2",
         "@pulumi/kubernetes": "^3.0.0-beta.1",
         "@pulumi/pulumi": "^2.24.1",
-        "@types/node": "^14.14.37",
-        "@zeroindexed/k8s-external-service-account": "^0.1.0",
-        "@zeroindexed/valheim": "^0.1.0",
-        "@zeroindexed/valheimctl-worker": "^0.1.0",
-        "@zeroindexed/webpacker": "^0.1.0"
+        "@types/node": "^14.14.37"
     },
     "scripts": {
         "prepublishOnly": "tsc -b ."
