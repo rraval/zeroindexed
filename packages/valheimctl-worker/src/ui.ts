@@ -1,4 +1,3 @@
-import type {Entry} from "@zeroindexed/cloudflare-kv-log";
 import type {HtmlSafeString} from "escape-html-template-tag";
 import html from "escape-html-template-tag";
 
@@ -34,11 +33,7 @@ export async function indexHtml({
     config: ValheimCtlConfig;
     debug: boolean;
 }): Promise<Response> {
-    const [
-        statefulSetState,
-        podState,
-        odinState,
-    ] = await Promise.all([
+    const [statefulSetState, podState, odinState] = await Promise.all([
         StatefulSetState.fromApi(config),
         PodState.fromApi(config),
         OdinState.fromApi(config),
@@ -111,7 +106,8 @@ export async function indexHtml({
                         cursor: pointer;
                     }
 
-                    input[type="submit"]:hover, input[type="submit"]:focus {
+                    input[type="submit"]:hover,
+                    input[type="submit"]:focus {
                         background: #0077cc;
                     }
 
@@ -265,11 +261,7 @@ async function debugHtml({
     podState: PodState;
     odinState: OdinState;
 }): Promise<HtmlSafeString> {
-    const [
-        actorLogs,
-        idleShutdownLogs,
-        odinObservation,
-    ] = await Promise.all([
+    const [actorLogs, idleShutdownLogs, odinObservation] = await Promise.all([
         debugPromise(config.actorLogger?.newest()),
         debugPromise(config.idleShutdownLogger?.newest()),
         debugPromise(OdinObservation.get(config)),

@@ -98,7 +98,9 @@ export class Logger {
         return this.entries((a, b) => b.instant - a.instant);
     }
 
-    private async entries(order: (a: ScannedKey, b: ScannedKey) => number): Promise<Array<Entry>> {
+    private async entries(
+        order: (a: ScannedKey, b: ScannedKey) => number,
+    ): Promise<Array<Entry>> {
         const keys = await this.persistence.scanKeys({
             // We cannot guarantee anything about ordering unless we are dealing
             // with all the keys.
