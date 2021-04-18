@@ -38,14 +38,10 @@ export async function indexHtml({
         statefulSetState,
         podState,
         odinState,
-        actorLogs,
-        idleShutdownLogs,
     ] = await Promise.all([
         StatefulSetState.fromApi(config),
         PodState.fromApi(config),
         OdinState.fromApi(config),
-        config.actorLogger?.newest(),
-        config.idleShutdownLogger?.newest(),
     ]);
 
     const autoRefresh =
@@ -149,23 +145,6 @@ export async function indexHtml({
                         border-left: none;
                     }
 
-                    #logs {
-                        border-top: 1px solid #111111;
-                    }
-
-                    #logs details {
-                        margin: 24px;
-                    }
-
-                    #logs p {
-                        margin-top: 12px;
-                    }
-
-                    #logs time {
-                        display: block;
-                        font-size: 0.8rem;
-                    }
-
                     #debug {
                         padding: 24px;
                     }
@@ -202,22 +181,6 @@ export async function indexHtml({
                         };
                         setTimeout(checkAndMaybeRefresh, 2000);
                     });
-
-                    document.addEventListener("DOMContentLoaded", function () {
-                        var formatter = new Intl.DateTimeFormat([], {
-                            dateStyle: "medium",
-                            timeStyle: "medium"
-                        });
-
-                        document.querySelectorAll("time").forEach(function (timeElem) {
-                            var instant = timeElem.getAttribute("datetime");
-                            if (instant == null) {
-                                return;
-                            }
-
-                            timeElem.innerText = formatter.format(new Date(instant));
-                        });
-                    });
                 </script>
             </head>
             <body>
@@ -253,11 +216,6 @@ export async function indexHtml({
                             <dd>${podState.status().info}</dd>
                         </dl>
                     </div>
-
-                    <div id="logs">
-                        ${logHtml("Actor Logs", actorLogs)}
-                        ${logHtml("Idle Shutdown Logs", idleShutdownLogs)}
-                    </div>
                 </div>
 
                 ${debug
@@ -289,27 +247,11 @@ function buttonHtml(statefulSetState: StatefulSetState): HtmlSafeString {
     }
 }
 
-function logHtml(title: string, logs: undefined | Array<Entry>): HtmlSafeString {
-    if (logs == null || logs.length === 0) {
-        return html``;
+function debugPromise<T>(promise: Promise<T> | undefined): Promise<string> {
+    if (promise == null) {
+        return Promise.resolve("undefined");
     }
-
-    return html`
-        <details>
-            <summary>${title}</summary>
-            ${logs.map(logEntryHtml)}
-        </details>
-    `;
-}
-
-function logEntryHtml(entry: Entry): HtmlSafeString {
-    const instant = new Date(entry.instant).toISOString();
-    return html`
-        <p>
-            <time datetime="${instant}">${instant}</time>
-            ${entry.message}
-        </p>
-    `;
+    return promise.then(debugRepr).catch(debugRepr);
 }
 
 async function debugHtml({
@@ -323,13 +265,27 @@ async function debugHtml({
     podState: PodState;
     odinState: OdinState;
 }): Promise<HtmlSafeString> {
-    const shutdownText = await OdinObservation.get(config)
-        .then((observation) => debugRepr(observation))
-        .catch((e) => debugRepr(e));
+    const [
+        actorLogs,
+        idleShutdownLogs,
+        odinObservation,
+    ] = await Promise.all([
+        debugPromise(config.actorLogger?.newest()),
+        debugPromise(config.idleShutdownLogger?.newest()),
+        debugPromise(OdinObservation.get(config)),
+    ]);
 
     return html`
         <div id="debug">
             <h1>Debug</h1>
+            <details>
+                <summary>Actor Logs</summary>
+                <code>${actorLogs}</code>
+            </details>
+            <details>
+                <summary>Idle Shutdown Logs</summary>
+                <code>${idleShutdownLogs}</code>
+            </details>
             <details>
                 <summary>Stateful Set</summary>
                 <code>${statefulSetState.response.debugRepr()}</code>
@@ -343,8 +299,8 @@ async function debugHtml({
                 <code>${odinState.response.debugRepr()}</code>
             </details>
             <details>
-                <summary>Idle Shutdown</summary>
-                <code>${shutdownText}</code>
+                <summary>Odin Observation</summary>
+                <code>${odinObservation}</code>
             </details>
         </div>
     `;
