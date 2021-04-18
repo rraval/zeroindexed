@@ -11,11 +11,7 @@ export interface OdinObservation {
 
 export const OdinObservation = {
     async get(config: ValheimCtlConfig): Promise<OdinObservation | null> {
-        if (config.idleShutdown == null) {
-            throw new Error("Shutdown not configured");
-        }
-
-        const json = await config.idleShutdown.kv.get(KEY);
+        const json = await config.kv.get(KEY);
         if (json == null) {
             return null;
         }
@@ -28,11 +24,7 @@ export const OdinObservation = {
     },
 
     async put(config: ValheimCtlConfig, observation: OdinObservation): Promise<void> {
-        if (config.idleShutdown == null) {
-            throw new Error("Shutdown not configured");
-        }
-
-        await config.idleShutdown.kv.put(KEY, JSON.stringify(observation));
+        await config.kv.put(KEY, JSON.stringify(observation));
     },
 
     async observe(config: ValheimCtlConfig): Promise<OdinObservation> {
@@ -83,7 +75,8 @@ function shouldShutdown({
 export async function observeAndPossiblyShutdown(
     config: ValheimCtlConfig,
 ): Promise<void> {
-    if (config.idleShutdown == null) {
+    const {idleShutdownAfterMs} = config;
+    if (idleShutdownAfterMs == null) {
         throw new Error("Shutdown not configured");
     }
 
@@ -106,7 +99,7 @@ export async function observeAndPossiblyShutdown(
     if (
         shouldShutdown({
             observation: combined.observation,
-            timeout: config.idleShutdown.afterMs,
+            timeout: idleShutdownAfterMs,
         })
     ) {
         pending.push(scaleStatefulSet({config, replicas: 0}));

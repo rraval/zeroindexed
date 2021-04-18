@@ -33,7 +33,7 @@ export function asNumber(thing: unknown): number {
     throw new Error(`Expected number, got ${typeof thing} ${debugRepr(thing)}`);
 }
 
-export function asNumberString(thing: unknown): number {
+export function asStringNumber(thing: unknown): number {
     const str = asString(thing);
     const num = parseInt(str, 10);
     if (Number.isNaN(num)) {

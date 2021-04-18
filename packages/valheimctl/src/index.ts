@@ -210,23 +210,22 @@ export class ValheimCtl extends pulumi.ComponentResource {
             },
         ];
 
-        const kvNamespaceBindings: Array<cloudflare.types.input.WorkerScriptKvNamespaceBinding> = [];
+        const kv = new cloudflare.WorkersKvNamespace(
+            "valheimctl-kv",
+            {title: "valheimctl-kv"},
+            {parent: this},
+        );
+        const kvNamespaceBindings: Array<cloudflare.types.input.WorkerScriptKvNamespaceBinding> = [
+            {
+                name: "VALHEIMCTL_KV",
+                namespaceId: kv.id,
+            },
+        ];
 
         if (idleShutdown != null) {
             plainTextBindings.push({
                 name: "VALHEIMCTL_IDLE_SHUTDOWN_AFTER_MS",
                 text: pulumi.concat(idleShutdown.afterMs),
-            });
-
-            const kv = new cloudflare.WorkersKvNamespace(
-                "valheimctl-idle_shutdown",
-                {title: "valheimctl-idle_shutdown"},
-                {parent: this},
-            );
-
-            kvNamespaceBindings.push({
-                name: "VALHEIMCTL_KV",
-                namespaceId: kv.id,
             });
         }
 

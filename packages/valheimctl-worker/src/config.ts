@@ -1,4 +1,4 @@
-import {asNumberString, asObject, asString} from "./util";
+import {asStringNumber, asObject, asOptional, asString} from "./util";
 
 export interface ValheimCtlConfig {
     k8sGateway: string;
@@ -8,10 +8,8 @@ export interface ValheimCtlConfig {
     podName: string;
     odinName: string;
     password: string;
-    idleShutdown: null | {
-        kv: KVNamespace;
-        afterMs: number;
-    };
+    kv: KVNamespace;
+    idleShutdownAfterMs: number | null;
 }
 
 function asKVNamespace(thing: unknown): KVNamespace {
@@ -27,9 +25,6 @@ export const ValheimCtlConfig = {
     fromGlobalThis(): ValheimCtlConfig {
         const env = globalThis as Record<string, unknown>;
 
-        const idleShutdownKv = env["VALHEIMCTL_KV"];
-        const idleShutdownAfterMs = env["VALHEIMCTL_IDLE_SHUTDOWN_AFTER_MS"];
-
         return {
             k8sGateway: asString(env["VALHEIMCTL_K8S_GATEWAY"]),
             k8sToken: asString(env["VALHEIMCTL_K8S_TOKEN"]),
@@ -38,13 +33,11 @@ export const ValheimCtlConfig = {
             podName: asString(env["VALHEIMCTL_POD_NAME"]),
             odinName: asString(env["VALHEIMCTL_ODIN_NAME"]),
             password: asString(env["VALHEIMCTL_PASSWORD"]),
-            idleShutdown:
-                idleShutdownKv == null || idleShutdownAfterMs == null
-                    ? null
-                    : {
-                          kv: asKVNamespace(idleShutdownKv),
-                          afterMs: asNumberString(idleShutdownAfterMs),
-                      },
+            kv: asKVNamespace(env["VALHEIMCTL_KV"]),
+            idleShutdownAfterMs: asOptional(
+                asStringNumber,
+                env["VALHEIMCTL_IDLE_SHUTDOWN_AFTER_MS"],
+            ),
         };
     },
 };
