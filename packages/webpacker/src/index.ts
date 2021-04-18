@@ -27,17 +27,17 @@ function webpackRun(configuration: webpack.Configuration): Promise<webpack.Stats
 }
 
 export async function webpacker({
-    module,
-    webpackConfigName,
+    package: packageName,
+    webpackConfigPath,
 }: {
-    module: string;
-    webpackConfigName: string;
+    package: string;
+    webpackConfigPath: string;
 }): Promise<string> {
-    const modulePath = require.resolve(module);
+    const modulePath = require.resolve(packageName);
     const moduleDir = path.dirname(modulePath);
 
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const webpackConfig = require(path.join(moduleDir, webpackConfigName));
+    const webpackConfig = require(path.join(moduleDir, webpackConfigPath));
 
     await webpackRun(webpackConfig);
 
