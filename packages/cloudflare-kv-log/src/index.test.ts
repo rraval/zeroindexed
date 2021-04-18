@@ -4,7 +4,7 @@ import {jest} from "@jest/globals";
 import fc from "fast-check";
 import {testProp} from "jest-fast-check";
 
-import {Entry, Logger, Persistence} from ".";
+import {Entry, Logger} from ".";
 
 // This module is distributed as ESM and jest has trouble with modules:
 // https://jestjs.io/docs/ecmascript-modules
@@ -41,15 +41,14 @@ testProp(
     "read your writes",
     [arbitraryOriginalAndShuffledEntries, fc.string()],
     async ({originalEntries, shuffledEntries}, prefix) => {
-        const persistence = new Persistence({
+        const logger = new Logger({
             kv: new FakeKV(),
             prefix,
             ttl: 1000,
         });
-        const logger = new Logger(persistence);
 
         for (const {instant, message} of shuffledEntries) {
-            persistence.push({
+            logger.push({
                 instant,
                 message,
             });

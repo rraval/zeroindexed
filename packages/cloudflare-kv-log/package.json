@@ -8,6 +8,9 @@
     "license": "MIT",
     "main": "dist/index.js",
     "typings": "dist/index.d.js",
+    "files": [
+        "dist/*"
+    ],
     "dependencies": {
         "@cfworker/uuid": "^1.6.11",
         "@cloudflare/workers-types": "^2.2.1"

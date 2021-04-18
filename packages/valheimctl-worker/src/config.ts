@@ -1,4 +1,4 @@
-import {Logger, Persistence} from "@zeroindexed/cloudflare-kv-log";
+import {Logger} from "@zeroindexed/cloudflare-kv-log";
 
 import {KV} from "./kv";
 import {asStringNumber, asObject, asOptional, asString} from "./util";
@@ -50,13 +50,11 @@ export const ValheimCtlConfig = {
             actorLogger:
                 actorLogTtl == null
                     ? null
-                    : new Logger(
-                          new Persistence({
-                              kv,
-                              prefix: KV.actorLogPrefix,
-                              ttl: actorLogTtl,
-                          }),
-                      ),
+                    : new Logger({
+                          kv,
+                          prefix: KV.actorLogPrefix,
+                          ttl: actorLogTtl,
+                      }),
             idleShutdownAfter: asOptional(
                 asStringNumber,
                 env["VALHEIMCTL_IDLE_SHUTDOWN_AFTER"],
@@ -64,13 +62,11 @@ export const ValheimCtlConfig = {
             idleShutdownLogger:
                 idleShutdownLogTtl == null
                     ? null
-                    : new Logger(
-                          new Persistence({
-                              kv,
-                              prefix: KV.idleShutdownLogPrefix,
-                              ttl: idleShutdownLogTtl,
-                          }),
-                      ),
+                    : new Logger({
+                          kv,
+                          prefix: KV.idleShutdownLogPrefix,
+                          ttl: idleShutdownLogTtl,
+                      }),
         };
     },
 };
