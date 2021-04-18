@@ -90,32 +90,33 @@ export async function indexHtml({
 
                     #panel-controls {
                         display: flex;
-                        margin: 0px 12px 24px 12px;
+                        padding: 0 12px 12px 12px;
                         align-items: center;
+                        flex-wrap: wrap;
                     }
 
                     form {
                         flex: 0 0 auto;
-                        margin: 0px 12px;
+                        margin: 12px;
                     }
 
                     label {
                         flex: 1 0 auto;
-                        margin: 0px 24px;
+                        margin: 12px;
                     }
 
                     input[type="submit"] {
                         padding: 12px;
                         border: none;
                         color: #ffffff;
-                        background: #51735d;
+                        background: #0095ff;
                         border-radius: 4px;
                         transition: all 0.4s ease;
                         cursor: pointer;
                     }
 
-                    input[type="submit"]:hover {
-                        background: #8ca680;
+                    input[type="submit"]:hover, input[type="submit"]:focus {
+                        background: #0077cc;
                     }
 
                     input[type="checkbox"] {
@@ -130,18 +131,18 @@ export async function indexHtml({
                     }
 
                     #panel h1 {
-                        margin: 24px 24px 8px 24px;
+                        margin: 24px 24px 0px 24px;
                     }
 
                     #panel-info {
                         display: flex;
                         border-top: 1px solid #111111;
+                        flex-wrap: wrap;
                     }
 
                     #panel-info > dl {
                         flex: 1 1 0px;
                         padding: 24px;
-                        border-left: 1px solid #111111;
                     }
 
                     #panel-info > dl:first-child {
@@ -149,12 +150,20 @@ export async function indexHtml({
                     }
 
                     #logs {
-                        border-top: 1px solid black;
-                        padding: 24px;
+                        border-top: 1px solid #111111;
+                    }
+
+                    #logs details {
+                        margin: 24px;
+                    }
+
+                    #logs p {
+                        margin-top: 12px;
                     }
 
                     #logs time {
-                        font-weight: bold;
+                        display: block;
+                        font-size: 0.8rem;
                     }
 
                     #debug {
@@ -169,6 +178,16 @@ export async function indexHtml({
                         font-family: monospace;
                         white-space: pre;
                         overflow: scroll;
+                    }
+
+                    @media only screen and (max-width: 720px) {
+                        body {
+                            background: #ffffff;
+                        }
+
+                        #panel {
+                            border-width: 0px;
+                        }
                     }
                 </style>
 
@@ -206,13 +225,7 @@ export async function indexHtml({
                     <h1>${odinState.info()}</h1>
 
                     <div id="panel-controls">
-                        <form method="POST" action="/start">
-                            <input type="submit" value="Start" />
-                        </form>
-
-                        <form method="POST" action="/stop">
-                            <input type="submit" value="Stop" />
-                        </form>
+                        ${buttonHtml(statefulSetState)}
 
                         <label>
                             <input
@@ -220,7 +233,7 @@ export async function indexHtml({
                                 type="checkbox"
                                 ${autoRefresh ? "checked" : ""}
                             />
-                            Refresh every 2 seconds
+                            Auto Refresh
                         </label>
                     </div>
 
@@ -258,6 +271,22 @@ export async function indexHtml({
             "Content-Type": "text/html; charset=UTF-8",
         },
     });
+}
+
+function buttonHtml(statefulSetState: StatefulSetState): HtmlSafeString {
+    if (statefulSetState.desiredReplicas() > 0) {
+        return html`
+            <form method="POST" action="/stop">
+                <input type="submit" value="Stop Server" />
+            </form>
+        `;
+    } else {
+        return html`
+            <form method="POST" action="/start">
+                <input type="submit" value="Start Server" />
+            </form>
+        `;
+    }
 }
 
 function logHtml(title: string, logs: undefined | Array<Entry>): HtmlSafeString {
