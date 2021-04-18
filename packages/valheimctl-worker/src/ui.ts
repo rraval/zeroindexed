@@ -1,3 +1,4 @@
+import type {Entry} from "@zeroindexed/cloudflare-kv-log";
 import type {HtmlSafeString} from "escape-html-template-tag";
 import html from "escape-html-template-tag";
 
@@ -33,10 +34,18 @@ export async function indexHtml({
     config: ValheimCtlConfig;
     debug: boolean;
 }): Promise<Response> {
-    const [statefulSetState, podState, odinState] = await Promise.all([
+    const [
+        statefulSetState,
+        podState,
+        odinState,
+        actorLogs,
+        idleShutdownLogs,
+    ] = await Promise.all([
         StatefulSetState.fromApi(config),
         PodState.fromApi(config),
         OdinState.fromApi(config),
+        config.actorLogger?.newest(),
+        config.idleShutdownLogger?.newest(),
     ]);
 
     const autoRefresh =
@@ -139,6 +148,15 @@ export async function indexHtml({
                         border-left: none;
                     }
 
+                    #logs {
+                        border-top: 1px solid black;
+                        padding: 24px;
+                    }
+
+                    #logs time {
+                        font-weight: bold;
+                    }
+
                     #debug {
                         padding: 24px;
                     }
@@ -164,6 +182,22 @@ export async function indexHtml({
                             setTimeout(checkAndMaybeRefresh, 2000);
                         };
                         setTimeout(checkAndMaybeRefresh, 2000);
+                    });
+
+                    document.addEventListener("DOMContentLoaded", function () {
+                        var formatter = new Intl.DateTimeFormat([], {
+                            dateStyle: "medium",
+                            timeStyle: "medium"
+                        });
+
+                        document.querySelectorAll("time").forEach(function (timeElem) {
+                            var instant = timeElem.getAttribute("datetime");
+                            if (instant == null) {
+                                return;
+                            }
+
+                            timeElem.innerText = formatter.format(new Date(instant));
+                        });
                     });
                 </script>
             </head>
@@ -206,6 +240,11 @@ export async function indexHtml({
                             <dd>${podState.status().info}</dd>
                         </dl>
                     </div>
+
+                    <div id="logs">
+                        ${logHtml("Actor Logs", actorLogs)}
+                        ${logHtml("Idle Shutdown Logs", idleShutdownLogs)}
+                    </div>
                 </div>
 
                 ${debug
@@ -219,6 +258,29 @@ export async function indexHtml({
             "Content-Type": "text/html; charset=UTF-8",
         },
     });
+}
+
+function logHtml(title: string, logs: undefined | Array<Entry>): HtmlSafeString {
+    if (logs == null || logs.length === 0) {
+        return html``;
+    }
+
+    return html`
+        <details>
+            <summary>${title}</summary>
+            ${logs.map(logEntryHtml)}
+        </details>
+    `;
+}
+
+function logEntryHtml(entry: Entry): HtmlSafeString {
+    const instant = new Date(entry.instant).toISOString();
+    return html`
+        <p>
+            <time datetime="${instant}">${instant}</time>
+            ${entry.message}
+        </p>
+    `;
 }
 
 async function debugHtml({

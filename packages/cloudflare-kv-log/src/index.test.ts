@@ -55,7 +55,7 @@ testProp(
             });
         }
 
-        const actualEntries = await logger.entries();
+        const actualEntries = await logger.oldest();
         if (originalEntries.length !== actualEntries.length) {
             return false;
         }

@@ -5,6 +5,11 @@ export interface Entry {
     message: string;
 }
 
+interface ScannedKey {
+    instant: number;
+    key: string;
+}
+
 function isObject(thing: unknown): thing is Record<string, unknown> {
     return thing != null && typeof thing === "object";
 }
@@ -49,7 +54,7 @@ export class Persistence {
         allowIncomplete,
     }: {
         allowIncomplete: boolean;
-    }): Promise<Array<{instant: number; key: string}>> {
+    }): Promise<Array<ScannedKey>> {
         const result = await this.kv.list({prefix: this.prefix});
 
         if (!allowIncomplete && !result.list_complete) {
@@ -85,16 +90,21 @@ export class Logger {
         return this.persistence.push(entry);
     }
 
-    public async entries(): Promise<Array<Entry>> {
+    public oldest(): Promise<Array<Entry>> {
+        return this.entries((a, b) => a.instant - b.instant);
+    }
+
+    public newest(): Promise<Array<Entry>> {
+        return this.entries((a, b) => b.instant - a.instant);
+    }
+
+    private async entries(order: (a: ScannedKey, b: ScannedKey) => number): Promise<Array<Entry>> {
         const keys = await this.persistence.scanKeys({
             // We cannot guarantee anything about ordering unless we are dealing
             // with all the keys.
             allowIncomplete: false,
         });
-
-        keys.sort((a, b) => {
-            return a.instant - b.instant;
-        });
+        keys.sort(order);
 
         return await Promise.all(
             keys.map(async ({instant, key}) => {
