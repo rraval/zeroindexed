@@ -9,6 +9,7 @@
         "@pulumi/kubernetes": "^3.0.0-beta.1",
         "@pulumi/pulumi": "^2.24.1",
         "@types/node": "^14.14.37",
+        "@zeroindexed/cloudflare-github-pages": "0.1.0",
         "@zeroindexed/valheim": "0.1.0",
         "@zeroindexed/valheimctl": "0.1.0"
     }
