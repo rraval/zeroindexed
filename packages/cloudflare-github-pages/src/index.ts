@@ -10,16 +10,26 @@ const githubPagesDnsServers = [
     "185.199.111.153",
 ];
 
+export interface CloudflareGithubPagesApexArgs {
+    zoneId: pulumi.Input<string>;
+    zone?: pulumi.Input<string>;
+}
+
+export interface CloudflareGithubPagesSubdomainArgs {
+    zoneId: pulumi.Input<string>;
+    subdomain: pulumi.Input<string>;
+}
+
+export interface CloudflareGithubPagesArgs {
+    zoneId: pulumi.Input<string>;
+    domainName: pulumi.Input<string>;
+    wwwCname: null | pulumi.Input<string>;
+}
+
 export class CloudflareGithubPages extends pulumi.ComponentResource {
     public static apex(
         name: string,
-        {
-            zoneId,
-            zone,
-        }: {
-            zoneId: pulumi.Input<string>;
-            zone?: pulumi.Input<string>;
-        },
+        {zoneId, zone}: CloudflareGithubPagesApexArgs,
         opts?: pulumi.ComponentResourceOptions,
     ): CloudflareGithubPages {
         return new CloudflareGithubPages(
@@ -35,13 +45,7 @@ export class CloudflareGithubPages extends pulumi.ComponentResource {
 
     public static subdomain(
         name: string,
-        {
-            zoneId,
-            subdomain,
-        }: {
-            zoneId: pulumi.Input<string>;
-            subdomain: pulumi.Input<string>;
-        },
+        {zoneId, subdomain}: CloudflareGithubPagesSubdomainArgs,
         opts?: pulumi.ComponentResourceOptions,
     ): CloudflareGithubPages {
         return new CloudflareGithubPages(
@@ -60,18 +64,11 @@ export class CloudflareGithubPages extends pulumi.ComponentResource {
 
     private constructor(
         name: string,
-        {
-            zoneId,
-            domainName,
-            wwwCname,
-        }: {
-            zoneId: pulumi.Input<string>;
-            domainName: pulumi.Input<string>;
-            wwwCname: null | pulumi.Input<string>;
-        },
+        args: CloudflareGithubPagesArgs,
         opts?: pulumi.ComponentResourceOptions,
     ) {
-        super("zeroindexed:cloudflare-github-pages", name, {}, opts);
+        super("zeroindexed:cloudflare-github-pages", name, args, opts);
+        const {zoneId, domainName, wwwCname} = args;
 
         this.aRecords = githubPagesDnsServers.map((ip, index) => {
             return new cloudflare.Record(
