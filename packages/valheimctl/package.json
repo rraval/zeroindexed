@@ -9,9 +9,9 @@
     "main": "dist/index.js",
     "typings": "dist/index.d.js",
     "dependencies": {
-        "@pulumi/cloudflare": "^3.0.0",
-        "@pulumi/kubernetes": "^3.0.0",
-        "@pulumi/pulumi": "^3.0.0",
+        "@pulumi/cloudflare": "~3.0.0",
+        "@pulumi/kubernetes": "~3.0.0",
+        "@pulumi/pulumi": "~3.0.0",
         "@zeroindexed/k8s-external-service-account": "^0.1.0",
         "@zeroindexed/valheim": "^0.1.0",
         "@zeroindexed/valheimctl-worker": "^0.1.0",
