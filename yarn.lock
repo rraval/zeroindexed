@@ -1460,28 +1460,28 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
 
-"@pulumi/cloudflare@^2.14.2":
-  version "2.14.2"
-  resolved "https://registry.yarnpkg.com/@pulumi/cloudflare/-/cloudflare-2.14.2.tgz#cba1e49df6ccf537e6a2a1c3efe6d66dfc569d7b"
-  integrity sha512-sVpfHik2IKjN0knLNOxXb5WH7vg1Kp3aZAnhgCNh8PIPq3nh47Cr6NDBYScn7mcHX6aQfgzM57Sz3mh29tGxpA==
-  dependencies:
-    "@pulumi/pulumi" "^2.15.0"
-
-"@pulumi/gcp@^5.0.0-beta.1":
-  version "5.0.0-beta.2"
-  resolved "https://registry.yarnpkg.com/@pulumi/gcp/-/gcp-5.0.0-beta.2.tgz#a26aedcf98e1fc64b57920e1f045fe2af1eff743"
-  integrity sha512-as1ZeJAYvJic0kNki87f5PQvIygnff3fsJT05VsZM4W7tvjWm8HmuwB8LsNLKNFmOfomLSn2z2Pk6M7dcY1LnA==
+"@pulumi/cloudflare@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@pulumi/cloudflare/-/cloudflare-3.0.0.tgz#cc28f177e6e8a996b1b17d03e02136433c989b14"
+  integrity sha512-yqsV5ylGhVhaqa9vda0fFvJ63mwgJ3sGFmMxhrOaYlIjCBsqpjyYVLdnAigSy4EFJBEpjaCD0OmUOJJNpCkf9A==
   dependencies:
     "@pulumi/pulumi" "^3.0.0-alpha.0"
+
+"@pulumi/gcp@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@pulumi/gcp/-/gcp-5.0.0.tgz#094ede098d3ae33461cf016ed7219849e0484ee0"
+  integrity sha512-8/d4RRaSDOcG3P92XD0KIgBdLS9yozyiJXqpwvzErhp6c2UMnAAlLqymC5hpVKoa6tHBXPm0ZH3qmsx+3HEE6Q==
+  dependencies:
+    "@pulumi/pulumi" "^3.0.0"
     "@types/express" "^4.16.0"
     read-package-json "^2.0.13"
 
-"@pulumi/kubernetes@^3.0.0-beta.1":
-  version "3.0.0-beta.2"
-  resolved "https://registry.yarnpkg.com/@pulumi/kubernetes/-/kubernetes-3.0.0-beta.2.tgz#36e30413cb94d83099f05aec95379fd26f23f9d5"
-  integrity sha512-ZBBvpP3JH6IXMxvvBEsDor2VrLaRHsYlJu9aO3QMqA6asnKnr7AYMqmId6uNZBWRs8KNGXFu82GojYBTOnmYtA==
+"@pulumi/kubernetes@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@pulumi/kubernetes/-/kubernetes-3.0.0.tgz#4eb38916d7e2ffc49f4256a8d521739a770c8cb2"
+  integrity sha512-MhP1THt/yYQU+DK5UlAtDE7+7lJrGHkrOD7F00rYIKOYajxYK3bFnbjL+6RbN3VNioxH1T7ZWbphrLt1Wr+auA==
   dependencies:
-    "@pulumi/pulumi" "^3.0.0-alpha.0"
+    "@pulumi/pulumi" "^3.0.0"
     "@types/glob" "^5.0.35"
     "@types/node-fetch" "^2.1.4"
     "@types/tmp" "^0.0.33"
@@ -1490,10 +1490,10 @@
     shell-quote "^1.6.1"
     tmp "^0.0.33"
 
-"@pulumi/pulumi@^2.15.0", "@pulumi/pulumi@^2.24.1":
-  version "2.24.1"
-  resolved "https://registry.yarnpkg.com/@pulumi/pulumi/-/pulumi-2.24.1.tgz#79ec88c1c4576064b7dd31cccd6ea4bb0e7bed10"
-  integrity sha512-GVsZlHTnb5YsEoiYM1sQuhSz/iFxd0vuZtV105YyyB69s5Ij7TVFFwG3fN/S9OHfzTX0EKz1vUerDyuRe4XGaA==
+"@pulumi/pulumi@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@pulumi/pulumi/-/pulumi-3.0.0.tgz#b1a1a845718b21d3b4975740627f5b25f2c04fcb"
+  integrity sha512-s9pwbdFrMU8vt4F5aIf8cpnDmHSM5Pn5V2Y7T7m0R14pfxTjCqt5ZAuEdKys0SgL+DxDp5L4Kz/53SXC6MFEEw==
   dependencies:
     "@grpc/grpc-js" "^1.2.7"
     "@logdna/tail-file" "^2.0.6"
@@ -1724,7 +1724,7 @@
     "@types/node" "*"
     form-data "^3.0.0"
 
-"@types/node@*", "@types/node@>=12.12.47", "@types/node@^14.14.37":
+"@types/node@*", "@types/node@>=12.12.47":
   version "14.14.37"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.37.tgz#a3dd8da4eb84a996c36e331df98d82abd76b516e"
   integrity sha512-XYmBiy+ohOR4Lh5jE379fV2IU+6Jn4g5qASinhitfyO71b/sCo6MKsMLF5tc7Zf2CE8hViVQyYSobJNke8OvUw==
@@ -1733,6 +1733,11 @@
   version "13.13.48"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-13.13.48.tgz#46a3df718aed5217277f2395a682e055a487e341"
   integrity sha512-z8wvSsgWQzkr4sVuMEEOvwMdOQjiRY2Y/ZW4fDfjfe3+TfQrZqFKOthBgk2RnVEmtOKrkwdZ7uTvsxTBLjKGDQ==
+
+"@types/node@^14.14.41":
+  version "14.14.41"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.41.tgz#d0b939d94c1d7bd53d04824af45f1139b8c45615"
+  integrity sha512-dueRKfaJL4RTtSa7bWeTK1M+VH+Gns73oCgzvYfHZywRCoPSd8EkXBL0mZ9unPTveBn+D9phZBaxuzpwjWkW0g==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"

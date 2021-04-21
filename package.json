@@ -4,11 +4,11 @@
         "packages/*"
     ],
     "scripts": {
+        "build": "lerna run prepublishOnly",
         "debug": "node --inspect-brk node_modules/.bin/jest --runInBand",
         "lint": "prettier --check .; eslint --ext .ts,.tsx .",
         "preview": "cd packages/pulumi && pulumi preview",
         "test": "jest",
-        "ts": "lerna exec -- yarn run tsc -b .",
         "up": "cd packages/pulumi && pulumi up"
     },
     "devDependencies": {

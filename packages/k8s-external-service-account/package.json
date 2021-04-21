@@ -12,9 +12,9 @@
         "dist/*"
     ],
     "dependencies": {
-        "@pulumi/kubernetes": "^3.0.0-beta.1",
-        "@pulumi/pulumi": "^2.24.1",
-        "@types/node": "^14.14.37"
+        "@pulumi/kubernetes": "^3.0.0",
+        "@pulumi/pulumi": "^3.0.0",
+        "@types/node": "^14.14.41"
     },
     "scripts": {
         "prepublishOnly": "tsc -b ."
