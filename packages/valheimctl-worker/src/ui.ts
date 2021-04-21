@@ -1,10 +1,11 @@
-import type {HtmlSafeString} from "escape-html-template-tag";
 import html from "escape-html-template-tag";
 
 import type {ValheimCtlConfig} from "./config";
 import {StatefulSetState, PodState, OdinState} from "./kubernetes";
 import {OdinObservation} from "./shutdown";
 import {debugRepr} from "./util";
+
+type HtmlSafeString = ReturnType<typeof html>;
 
 function isTransitioning({
     statefulSetState,
