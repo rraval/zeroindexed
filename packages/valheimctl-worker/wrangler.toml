@@ -1,5 +1,8 @@
 name = "valheimctl"
-type = "webpack"
 workers_dev = true
 account_id = "9cf55f79e8bb29b869feaff7c95960a6"
-webpack_config = "webpack.wrangler.js"
+type = "javascript"
+
+[build]
+upload.format = "service-worker"
+command = "webpack"

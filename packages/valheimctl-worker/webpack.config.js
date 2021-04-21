@@ -6,8 +6,8 @@ module.exports = {
     devtool: false,
     entry: "./src",
     output: {
-        path: path.resolve(__dirname, "worker"),
-        filename: "worker.js",
+        path: path.resolve(__dirname, "dist"),
+        filename: "index.js",
     },
     resolve: {
         extensions: [".js", ".ts"],

@@ -7,19 +7,16 @@
     "author": "Ronuk Raval <ronuk.raval@gmail.com>",
     "license": "MIT",
     "main": "dist/index.js",
-    "typings": "dist/index.d.js",
-    "dependencies": {
-        "@cloudflare/workers-types": "^2.2.1",
-        "@zeroindexed/cloudflare-kv-log": "^0.1.0",
-        "escape-html-template-tag": "^2.0.4"
-    },
     "devDependencies": {
+        "@cloudflare/workers-types": "^2.2.1",
         "@cloudflare/wrangler": "^1.16.0",
+        "@zeroindexed/cloudflare-kv-log": "^0.1.0",
+        "escape-html-template-tag": "^2.0.4",
         "ts-loader": "^9.0.2",
         "webpack": "^5.34.0",
         "webpack-cli": "^4.6.0"
     },
     "scripts": {
-        "prepublishOnly": "tsc -b ."
+        "prepublishOnly": "webpack"
     }
 }
