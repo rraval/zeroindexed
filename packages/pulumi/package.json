@@ -8,7 +8,6 @@
         "@pulumi/gcp": "^5.0.0",
         "@pulumi/kubernetes": "^3.0.0",
         "@pulumi/pulumi": "^3.0.0",
-        "@types/node": "^14.14.41",
         "@zeroindexed/cloudflare-github-pages": "0.1.0",
         "@zeroindexed/valheim": "0.1.0",
         "@zeroindexed/valheimctl": "0.1.0"
