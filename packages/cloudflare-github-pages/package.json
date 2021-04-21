@@ -18,9 +18,5 @@
     },
     "scripts": {
         "prepublishOnly": "tsc -b ."
-    },
-    "devDependencies": {
-        "tslib": "^2.2.0",
-        "typescript": "^4.2.4"
     }
 }

@@ -14,10 +14,6 @@
     "dependencies": {
         "webpack": "^5.30.0"
     },
-    "devDependencies": {
-        "tslib": "^2.2.0",
-        "typescript": "^4.2.4"
-    },
     "scripts": {
         "prepublishOnly": "tsc -b ."
     }
