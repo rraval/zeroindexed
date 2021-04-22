@@ -3362,10 +3362,10 @@ escalade@^3.1.1:
   resolved "https://registry.yarnpkg.com/escalade/-/escalade-3.1.1.tgz#d8cfdc7000965c5a0174b4a82eaa5c0552742e40"
   integrity sha512-k0er2gUkLf8O0zKJiAhmkTnJlTvINGv7ygDNPbeIsX/TJjGJZHuh9B2UxbsaEkmlEo9MfhrSzmhIlhRlI2GXnw==
 
-escape-html-template-tag@^2.0.4:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/escape-html-template-tag/-/escape-html-template-tag-2.0.4.tgz#0ca67114e6b843a9638b1ac0c0697093037b184a"
-  integrity sha512-/OpviLIqqZ6Nn24v4KAlBTYa4fl4khz48eYj3vzWidI1tbdmla5X7h2NjO7Q5Zya1wjwl24TDHQxftPKGXqjww==
+escape-html-template-tag@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/escape-html-template-tag/-/escape-html-template-tag-2.1.0.tgz#45531a696a57932699c106b789909320367b8446"
+  integrity sha512-9WgdGq8gDCUd3bUufMT3Aj+32JNQ/YgzlhqhMdIgegtgPkSgIoQLPuSivBJSNE0AZkMcPweZ/8CSuzUMkU37yw==
 
 escape-string-regexp@^1.0.5:
   version "1.0.5"
@@ -8306,10 +8306,10 @@ webpack-sources@^2.1.1:
     source-list-map "^2.0.1"
     source-map "^0.6.1"
 
-webpack@^5.34.0:
-  version "5.34.0"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.34.0.tgz#8f12bfd3474e7543232345b89294cfe8a5191c10"
-  integrity sha512-+WiFMgaZqhu7zKN64LQ7z0Ml4WWI+9RwG6zmS0wJDQXiCeg3hpN8fYFNJ+6WlosDT55yVxTfK7XHUAOVR4rLyA==
+webpack@^5.35.0:
+  version "5.35.0"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.35.0.tgz#4db23c2b96c4e53a90c5732d7cdb301a84a33576"
+  integrity sha512-au3gu55yYF/h6NXFr0KZPZAYxS6Nlc595BzYPke8n0CSff5WXcoixtjh5LC/8mXunkRKxhymhXmBY0+kEbR6jg==
   dependencies:
     "@types/eslint-scope" "^3.7.0"
     "@types/estree" "^0.0.47"
