@@ -69,7 +69,7 @@ function shouldShutdown({
     timeout: number;
 }): boolean {
     return (
-        observation.numPlayers != null &&
+        observation.numPlayers === 0 &&
         Date.now() - observation.instant > timeout * 1000
     );
 }
