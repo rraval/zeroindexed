@@ -31,7 +31,7 @@ export function makeKubernetes(
         {protect: true},
     );
 
-    const provider = new k8s.Provider(config.kubernetes.clusterName, {
+    const provider = new k8s.Provider("kubernetes-provider", {
         kubeconfig: pulumi
             .all([cluster.name, cluster.endpoint, cluster.masterAuth])
             .apply(([name, endpoint, masterAuth]) => {
