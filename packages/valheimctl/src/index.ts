@@ -1,9 +1,15 @@
+import fs from "fs";
+
 import * as cloudflare from "@pulumi/cloudflare";
 import * as k8s from "@pulumi/kubernetes";
 import * as pulumi from "@pulumi/pulumi";
 import {ExternalServiceAccount} from "@zeroindexed/k8s-external-service-account";
 import type {ValheimServer} from "@zeroindexed/valheim";
-import {webpacker} from "@zeroindexed/webpacker";
+
+const WORKER_SCRIPT = fs.promises.readFile(
+    require.resolve("@zeroindexed/valheimctl-worker"),
+    {encoding: "utf8"},
+);
 
 function makeRoleAndBinding(props: {
     name: string;
@@ -230,10 +236,7 @@ export class ValheimCtl extends pulumi.ComponentResource {
             "valheimctl",
             {
                 name: "valheimctl",
-                content: webpacker({
-                    package: "@zeroindexed/valheimctl-worker",
-                    webpackConfigPath: "../webpack.config.js",
-                }),
+                content: WORKER_SCRIPT,
                 plainTextBindings,
                 secretTextBindings: [
                     {

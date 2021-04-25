@@ -10,7 +10,5 @@
     "references": [
         {"path": "../k8s-external-service-account"},
         {"path": "../valheim"},
-        {"path": "../valheimctl-worker"},
-        {"path": "../webpacker"}
     ]
 }
