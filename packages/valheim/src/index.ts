@@ -26,9 +26,7 @@ class ValheimDisk extends pulumi.ComponentResource {
     ) {
         super("zeroindexed:valheim:disk", name, {}, opts);
 
-        this.persistentVolume = persistentVolumeFactory(name, {
-            parent: this,
-        });
+        this.persistentVolume = persistentVolumeFactory(name, {parent: this});
 
         this.persistentVolumeClaim = new k8s.core.v1.PersistentVolumeClaim(
             name,
@@ -44,11 +42,88 @@ class ValheimDisk extends pulumi.ComponentResource {
                     storageClassName: this.persistentVolume.spec.storageClassName,
                 },
             },
-            {
-                parent: this,
-            },
+            {parent: this},
         );
     }
+}
+
+/**
+ * Arguments for {@link ValheimServer}.
+ */
+export interface ValheimServerArgs {
+    /** Persistent disk for live game data. ~2G is probably good enough. */
+    configVolumeFactory: ValheimPersistentVolumeFactory;
+
+    /** Persistent disk for Steam game files. ~10G is probably good enough. */
+    steamVolumeFactory: ValheimPersistentVolumeFactory;
+
+    /**
+     * Persistent disk for backups of game data.
+     *
+     * Optional but recommended. ~10G is probably good enough.
+     */
+    backupVolumeFactory?: ValheimPersistentVolumeFactory;
+
+    /**
+     * Pass `true` to make `pulumi up` run the game server.
+     *
+     * Pass `false` (the default) keeps the server off.
+     *
+     * NOTE: `valheimctl` can independently bring the server up or
+     * down. `pulumi` reconciles things by comparing against its own
+     * stack state, not by querying the Kubernetes cluster, so it will
+     * not interfere if the input configuration has not changed.
+     */
+    isRunning?: pulumi.Input<boolean>;
+
+    /**
+     * IP address for the game server.
+     */
+    ip: pulumi.Input<string>;
+
+    /**
+     * CPU request for the container, in "cpu units":
+     * https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#meaning-of-cpu
+     *
+     * 4 CPUs seems like overkill:
+     * https://www.reddit.com/r/valheim/comments/lcg8xk/dedicated_server_requirements/
+     */
+    cpu: pulumi.Input<string>;
+
+    /**
+     * Memory request for the container, in bytes or standard prefixes:
+     * https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#meaning-of-memory
+     *
+     * 4Gi seems about right:
+     * https://www.reddit.com/r/valheim/comments/lcg8xk/dedicated_server_requirements/
+     */
+    memory: pulumi.Input<string>;
+
+    /** Should be a name from the TZ database, like `America/Toronto` */
+    timeZone: pulumi.Input<string>;
+
+    /** Displayed by the server search UI in game. */
+    serverName: pulumi.Input<string>;
+
+    /**
+     * Influences the filename used to represent the game data for a server.
+     *
+     * Specifying `foo` here will use the `worlds/foo.db` and
+     * `worlds/foo.fwl` files from `configVolumeFactory`.
+     */
+    worldName: pulumi.Input<string>;
+
+    /**
+     * In game password for joining a server.
+     */
+    password: pulumi.Input<string>;
+
+    /**
+     * Announces server status via Discord.
+     *
+     * https://github.com/mbround18/valheim-docker/blob/main/docs/webhooks.md
+     */
+    webhookUrl?: pulumi.Input<string>;
 }
 
 /**
@@ -67,97 +142,27 @@ export class ValheimServer extends pulumi.ComponentResource {
 
     public constructor(
         name: string,
-        props: {
-            /** Persistent disk for live game data. ~2G is probably good enough. */
-            configVolumeFactory: ValheimPersistentVolumeFactory;
-
-            /** Persistent disk for Steam game files. ~10G is probably good enough. */
-            steamVolumeFactory: ValheimPersistentVolumeFactory;
-
-            /**
-             * Persistent disk for backups of game data.
-             *
-             * Optional but recommended. ~10G is probably good enough.
-             */
-            backupVolumeFactory?: ValheimPersistentVolumeFactory;
-
-            /**
-             * Pass `true` to make `pulumi up` run the game server.
-             *
-             * Pass `false` (the default) keeps the server off.
-             *
-             * NOTE: `valheimctl` can independently bring the server up or
-             * down. `pulumi` reconciles things by comparing against its own
-             * stack state, not by querying the Kubernetes cluster, so it will
-             * not interfere if the input configuration has not changed.
-             */
-            isRunning?: pulumi.Input<boolean>;
-
-            /**
-             * IP address for the game server.
-             */
-            ip: pulumi.Input<string>;
-
-            /**
-             * CPU request for the container, in "cpu units":
-             * https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#meaning-of-cpu
-             *
-             * 4 CPUs seems like overkill:
-             * https://www.reddit.com/r/valheim/comments/lcg8xk/dedicated_server_requirements/
-             */
-            cpu: pulumi.Input<string>;
-
-            /**
-             * Memory request for the container, in bytes or standard prefixes:
-             * https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#meaning-of-memory
-             *
-             * 4Gi seems about right:
-             * https://www.reddit.com/r/valheim/comments/lcg8xk/dedicated_server_requirements/
-             */
-            memory: pulumi.Input<string>;
-
-            /** Should be a name from the TZ database, like `America/Toronto` */
-            timeZone: pulumi.Input<string>;
-
-            /** Displayed by the server search UI in game. */
-            serverName: pulumi.Input<string>;
-
-            /**
-             * Influences the filename used to represent the game data for a server.
-             *
-             * Specifying `foo` here will use the `worlds/foo.db` and
-             * `worlds/foo.fwl` files from `configVolumeFactory`.
-             */
-            worldName: pulumi.Input<string>;
-
-            /**
-             * In game password for joining a server.
-             */
-            password: pulumi.Input<string>;
-
-            /**
-             * Announces server status via Discord.
-             *
-             * https://github.com/mbround18/valheim-docker/blob/main/docs/webhooks.md
-             */
-            webhookUrl?: pulumi.Input<string>;
-        },
+        args: ValheimServerArgs,
         opts?: pulumi.ComponentResourceOptions,
     ) {
-        super("zeroindexed:valheim:server", name, {}, opts);
+        super("zeroindexed:valheim:server", name, args, opts);
 
-        this.configDisk = new ValheimDisk("valheim-config", props.configVolumeFactory, {
-            parent: this,
-        });
+        this.configDisk = new ValheimDisk(
+            "valheim-config",
+            args.configVolumeFactory,
+            {parent: this},
+        );
 
-        this.steamDisk = new ValheimDisk("valheim-steam", props.steamVolumeFactory, {
-            parent: this,
-        });
+        this.steamDisk = new ValheimDisk(
+            "valheim-steam",
+            args.steamVolumeFactory,
+            {parent: this},
+        );
 
-        if (props.backupVolumeFactory !== undefined) {
+        if (args.backupVolumeFactory !== undefined) {
             this.backupDisk = new ValheimDisk(
                 "valheim-backup",
-                props.backupVolumeFactory,
+                args.backupVolumeFactory,
                 {parent: this},
             );
         }
@@ -187,7 +192,7 @@ export class ValheimServer extends pulumi.ComponentResource {
                 spec: {
                     selector: labels,
                     type: "LoadBalancer",
-                    loadBalancerIP: props.ip,
+                    loadBalancerIP: args.ip,
                     ports: gameUdpPorts.map((port, index) => {
                         return {
                             port,
@@ -222,11 +227,11 @@ export class ValheimServer extends pulumi.ComponentResource {
         );
 
         const secretStringData: {[Key: string]: pulumi.Input<string>} = {
-            password: props.password,
+            password: args.password,
         };
 
-        if (props.webhookUrl !== undefined) {
-            secretStringData["webhookUrl"] = props.webhookUrl;
+        if (args.webhookUrl !== undefined) {
+            secretStringData["webhookUrl"] = args.webhookUrl;
         }
 
         this.secret = new k8s.core.v1.Secret(
@@ -237,9 +242,7 @@ export class ValheimServer extends pulumi.ComponentResource {
                 },
                 stringData: secretStringData,
             },
-            {
-                parent: this,
-            },
+            {parent: this},
         );
 
         const persistence: Array<{
@@ -272,15 +275,15 @@ export class ValheimServer extends pulumi.ComponentResource {
         const env = [
             {
                 name: "TZ",
-                value: props.timeZone,
+                value: args.timeZone,
             },
             {
                 name: "NAME",
-                value: props.serverName,
+                value: args.serverName,
             },
             {
                 name: "WORLD",
-                value: props.worldName,
+                value: args.worldName,
             },
             {
                 name: "PASSWORD",
@@ -331,7 +334,7 @@ export class ValheimServer extends pulumi.ComponentResource {
                         matchLabels: labels,
                     },
                     replicas: pulumi
-                        .output(props.isRunning ?? false)
+                        .output(args.isRunning ?? false)
                         .apply((isRunning) => {
                             return isRunning ? 1 : 0;
                         }),
@@ -363,8 +366,8 @@ export class ValheimServer extends pulumi.ComponentResource {
                                     ),
                                     resources: {
                                         requests: {
-                                            cpu: props.cpu,
-                                            memory: props.memory,
+                                            cpu: args.cpu,
+                                            memory: args.memory,
                                         },
                                     },
                                     env,
@@ -383,9 +386,7 @@ export class ValheimServer extends pulumi.ComponentResource {
                     },
                 },
             },
-            {
-                parent: this,
-            },
+            {parent: this},
         );
     }
 }

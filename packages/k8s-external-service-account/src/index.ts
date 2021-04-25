@@ -10,10 +10,9 @@ export class ExternalServiceAccount extends pulumi.ComponentResource {
         args: k8s.core.v1.ServiceAccountArgs,
         opts?: pulumi.ComponentResourceOptions,
     ) {
-        super("zeroindexed:k8s-external-service-account", name, {}, opts);
+        super("zeroindexed:k8s-external-service-account", name, args, opts);
 
         this.account = new k8s.core.v1.ServiceAccount("account", args, {
-            ...opts,
             parent: this,
         });
 
@@ -30,7 +29,7 @@ export class ExternalServiceAccount extends pulumi.ComponentResource {
 
                 return secretArray[0].name;
             }),
-            {...opts, parent: this},
+            {parent: this},
         );
 
         this.token = secret.data["token"].apply((encodedSecretToken) => {

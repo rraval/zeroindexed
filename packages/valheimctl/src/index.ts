@@ -28,9 +28,7 @@ function makeRoleAndBinding(props: {
                 },
             ],
         },
-        {
-            parent: props.parent,
-        },
+        {parent: props.parent},
     );
 
     const roleBinding = new k8s.rbac.v1.RoleBinding(
@@ -49,9 +47,7 @@ function makeRoleAndBinding(props: {
                 apiGroup: "rbac.authorization.k8s.io",
             },
         },
-        {
-            parent: props.parent,
-        },
+        {parent: props.parent},
     );
 
     return [role, roleBinding];
@@ -65,10 +61,28 @@ function makeUrl(
     return pulumi.concat(`https://${subdomain}.`, zone, path == null ? "" : `/${path}`);
 }
 
+export interface ValheimCtlArgs {
+    server: ValheimServer;
+    cloudflareZone: pulumi.Input<string>;
+    cloudflareZoneId: pulumi.Input<string>;
+    clusterEndpointIp: pulumi.Input<string>;
+    password: pulumi.Input<string>;
+    actorLogTtl?: pulumi.Input<number>;
+    idleShutdown?: {
+        schedule: pulumi.Input<string>;
+        after: pulumi.Input<number>;
+        logTtl?: pulumi.Input<number>;
+    };
+}
+
 export class ValheimCtl extends pulumi.ComponentResource {
     public constructor(
         name: string,
-        {
+        args: ValheimCtlArgs,
+        opts?: pulumi.ComponentResourceOptions,
+    ) {
+        super("zeroindexed:valheimctl", name, args, opts);
+        const {
             server,
             cloudflareZone,
             cloudflareZoneId,
@@ -76,22 +90,7 @@ export class ValheimCtl extends pulumi.ComponentResource {
             password,
             actorLogTtl,
             idleShutdown,
-        }: {
-            server: ValheimServer;
-            cloudflareZone: pulumi.Input<string>;
-            cloudflareZoneId: pulumi.Input<string>;
-            clusterEndpointIp: pulumi.Input<string>;
-            password: pulumi.Input<string>;
-            actorLogTtl?: pulumi.Input<number>;
-            idleShutdown?: {
-                schedule: pulumi.Input<string>;
-                after: pulumi.Input<number>;
-                logTtl?: pulumi.Input<number>;
-            };
-        },
-        opts?: pulumi.ComponentResourceOptions,
-    ) {
-        super("zeroindexed:valheimctl", name, {}, opts);
+        } = args;
 
         const metadata = {
             labels: {

@@ -79,10 +79,7 @@ export class CloudflareGithubPages extends pulumi.ComponentResource {
                     value: ip,
                     type: "A",
                 },
-                {
-                    ...opts,
-                    parent: this,
-                },
+                {parent: this},
             );
         });
 
@@ -97,10 +94,7 @@ export class CloudflareGithubPages extends pulumi.ComponentResource {
                           value: wwwCname,
                           type: "CNAME",
                       },
-                      {
-                          ...opts,
-                          parent: this,
-                      },
+                      {parent: this},
                   );
     }
 }
