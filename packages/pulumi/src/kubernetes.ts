@@ -11,7 +11,7 @@ export function makeKubernetes(
     provider: k8s.Provider;
 } {
     const cluster = new gcp.container.Cluster(
-        config.kubernetes.clusterName,
+        "kubernetes-cluster",
         {
             enableBinaryAuthorization: false,
             enableIntranodeVisibility: true,
