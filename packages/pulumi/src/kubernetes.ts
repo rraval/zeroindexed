@@ -28,7 +28,13 @@ export function makeKubernetes(
                 identityNamespace: `${gcp.config.project}.svc.id.goog`,
             },
         },
-        {protect: true},
+        {
+            protect: true,
+            aliases: [
+                {name: config.kubernetes.clusterName},
+                {name: "kubernetes-cluster"},
+            ],
+        },
     );
 
     const provider = new k8s.Provider(config.kubernetes.clusterName, {
