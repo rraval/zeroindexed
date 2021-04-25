@@ -7,8 +7,5 @@
         "lib": ["ES2016"],
         "types": ["@types/node"]
     },
-    "references": [
-        {"path": "../k8s-external-service-account"},
-        {"path": "../valheim"},
-    ]
+    "references": [{"path": "../k8s-external-service-account"}, {"path": "../valheim"}]
 }

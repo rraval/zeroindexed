@@ -147,17 +147,13 @@ export class ValheimServer extends pulumi.ComponentResource {
     ) {
         super("zeroindexed:valheim:server", name, args, opts);
 
-        this.configDisk = new ValheimDisk(
-            "valheim-config",
-            args.configVolumeFactory,
-            {parent: this},
-        );
+        this.configDisk = new ValheimDisk("valheim-config", args.configVolumeFactory, {
+            parent: this,
+        });
 
-        this.steamDisk = new ValheimDisk(
-            "valheim-steam",
-            args.steamVolumeFactory,
-            {parent: this},
-        );
+        this.steamDisk = new ValheimDisk("valheim-steam", args.steamVolumeFactory, {
+            parent: this,
+        });
 
         if (args.backupVolumeFactory !== undefined) {
             this.backupDisk = new ValheimDisk(

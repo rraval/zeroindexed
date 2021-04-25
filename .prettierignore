@@ -1,3 +1,4 @@
 Pulumi.yaml
 Pulumi.*.yaml
+/docs
 /packages/*/dist

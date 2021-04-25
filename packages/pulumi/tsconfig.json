@@ -11,6 +11,6 @@
     "references": [
         {"path": "../cloudflare-github-pages"},
         {"path": "../valheim"},
-        {"path": "../valheimctl"},
+        {"path": "../valheimctl"}
     ]
 }
