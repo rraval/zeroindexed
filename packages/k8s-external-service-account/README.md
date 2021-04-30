@@ -31,7 +31,8 @@ const serviceAccount = new ExternalServiceAccount(
     {parent: this},
 );
 
-// The token for use outside the cluster
+// The token for use outside the cluster.
+// This is the actual value that has already been base64 decoded.
 export const token = serviceAccount.token;
 
 // The actual name of the resource after Pulumi's autonaming

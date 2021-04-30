@@ -2,7 +2,7 @@
 
 Minimal logging for [Cloudflare workers][workers] backed by [Cloudflare workers KV][kv].
 
-Given the [architecture of workers KV][kv-arch], this package only makes sense for the narrow set of usecases where write volume is low and no correctness properties depend on the logging (writes are eventually consistent with guaranteed upper bound).
+Given the [architecture of workers KV][kv-arch], this package only makes sense for the narrow set of usecases where write volume is low and no correctness properties depend on the logging (writes are eventually consistent with no guaranteed upper bound).
 
 Reading the logs makes use of [listing keys][kv-list], which has a [rather low per day limit on the Cloudflare free tier][kv-limits].
 
