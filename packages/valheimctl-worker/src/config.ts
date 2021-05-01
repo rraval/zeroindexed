@@ -10,7 +10,7 @@ export interface ValheimCtlConfig {
     statefulSetName: string;
     podName: string;
     odinName: string;
-    password: string;
+    password: string | null;
     kv: KVNamespace;
     actorLogger: Logger | null;
     idleShutdownAfter: number | null;
@@ -45,7 +45,7 @@ export const ValheimCtlConfig = {
             statefulSetName: asString(env["VALHEIMCTL_STATEFUL_SET_NAME"]),
             podName: asString(env["VALHEIMCTL_POD_NAME"]),
             odinName: asString(env["VALHEIMCTL_ODIN_NAME"]),
-            password: asString(env["VALHEIMCTL_PASSWORD"]),
+            password: asOptional(asString, env["VALHEIMCTL_PASSWORD"]),
             kv,
             actorLogger:
                 actorLogTtl == null

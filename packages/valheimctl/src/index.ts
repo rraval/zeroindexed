@@ -72,7 +72,7 @@ export interface ValheimCtlArgs {
     cloudflareZone: pulumi.Input<string>;
     cloudflareZoneId: pulumi.Input<string>;
     clusterEndpointIp: pulumi.Input<string>;
-    password: pulumi.Input<string>;
+    password?: pulumi.Input<string>;
     actorLogTtl?: pulumi.Input<number>;
     idleShutdown?: {
         schedule: pulumi.Input<string>;
@@ -176,6 +176,20 @@ export class ValheimCtl extends pulumi.ComponentResource {
             {parent: this},
         );
 
+        const secretTextBindings: Array<cloudflare.types.input.WorkerScriptSecretTextBinding> = [
+            {
+                name: "VALHEIMCTL_K8S_TOKEN",
+                text: serviceAccount.token,
+            },
+        ];
+
+        if (password !== undefined) {
+            secretTextBindings.push({
+                name: "VALHEIMCTL_PASSWORD",
+                text: password,
+            });
+        }
+
         const plainTextBindings: Array<cloudflare.types.input.WorkerScriptPlainTextBinding> = [
             {
                 name: "VALHEIMCTL_K8S_GATEWAY",
@@ -238,16 +252,7 @@ export class ValheimCtl extends pulumi.ComponentResource {
                 name: "valheimctl",
                 content: WORKER_SCRIPT,
                 plainTextBindings,
-                secretTextBindings: [
-                    {
-                        name: "VALHEIMCTL_K8S_TOKEN",
-                        text: serviceAccount.token,
-                    },
-                    {
-                        name: "VALHEIMCTL_PASSWORD",
-                        text: password,
-                    },
-                ],
+                secretTextBindings,
                 kvNamespaceBindings,
             },
             {parent: this},

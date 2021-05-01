@@ -1,7 +1,7 @@
 {
     "name": "@zeroindexed/valheim",
     "version": "0.1.0",
-    "description": "Pulumi components to run Valheim in any cloud",
+    "description": "Pulumi component to run Valheim in any cloud",
     "repository": "https://github.com/rraval/zeroindexed",
     "homepage": "https://github.com/rraval/zeroindexed/packages/valheim",
     "author": "Ronuk Raval <ronuk.raval@gmail.com>",

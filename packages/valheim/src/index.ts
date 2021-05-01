@@ -114,9 +114,9 @@ export interface ValheimServerArgs {
     worldName: pulumi.Input<string>;
 
     /**
-     * In game password for joining a server.
+     * Optional in game password for joining a server.
      */
-    password: pulumi.Input<string>;
+    password?: pulumi.Input<string>;
 
     /**
      * Announces server status via Discord.
@@ -222,9 +222,11 @@ export class ValheimServer extends pulumi.ComponentResource {
             {parent: this},
         );
 
-        const secretStringData: {[Key: string]: pulumi.Input<string>} = {
-            password: args.password,
-        };
+        const secretStringData: {[Key: string]: pulumi.Input<string>} = {};
+
+        if (args.password !== undefined) {
+            secretStringData["password"] = args.password;
+        }
 
         if (args.webhookUrl !== undefined) {
             secretStringData["webhookUrl"] = args.webhookUrl;
@@ -287,6 +289,7 @@ export class ValheimServer extends pulumi.ComponentResource {
                     secretKeyRef: {
                         name: this.secret.metadata.name,
                         key: "password",
+                        optional: true,
                     },
                 },
             },

@@ -2,7 +2,9 @@ import {describe, test, expect} from "@jest/globals";
 import fc from "fast-check";
 import {testProp} from "jest-fast-check";
 
-import {decodeHttpBasicAuthorization, timingSafeEquals} from ".";
+import type {ValheimCtlConfig} from "../config";
+
+import {decodeHttpBasicAuthorization, isAuthorized, timingSafeEquals} from ".";
 
 describe("timingSafeEquals", () => {
     testProp("matches self", [fc.string()], (str) => timingSafeEquals(str, str));
@@ -55,5 +57,26 @@ describe("decodeHttpBasicAuthorization", () => {
                 });
             });
         });
+    });
+});
+
+describe("isAuthorized", () => {
+    test("true with no password", () => {
+        expect(isAuthorized({password: null} as ValheimCtlConfig, null)).toBe(true);
+    });
+
+    test("false if passwords don't match", () => {
+        expect(
+            isAuthorized({password: "secret"} as ValheimCtlConfig, "Basic OmJsYWg="),
+        ).toBe(false);
+    });
+
+    test.only("true if passwords match", () => {
+        expect(
+            isAuthorized(
+                {password: "secret"} as ValheimCtlConfig,
+                "Basic OnNlY3JldA==",
+            ),
+        ).toBe(true);
     });
 });

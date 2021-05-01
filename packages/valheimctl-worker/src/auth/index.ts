@@ -49,6 +49,10 @@ export function isAuthorized(
     config: ValheimCtlConfig,
     header: string | null | undefined,
 ): boolean {
+    if (config.password == null) {
+        return true;
+    }
+
     const auth = decodeHttpBasicAuthorization(header);
     if (auth == null) {
         return false;
