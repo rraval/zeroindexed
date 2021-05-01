@@ -183,7 +183,13 @@ export async function indexHtml({
                     <h1>${odinState.info()}</h1>
 
                     <div id="panel-controls">
-                        ${buttonHtml(statefulSetState)}
+                        <form method="POST" action="/start">
+                            <input type="submit" value="Start" />
+                        </form>
+
+                        <form method="POST" action="/stop">
+                            <input type="submit" value="Stop" />
+                        </form>
 
                         <label>
                             <input
@@ -224,22 +230,6 @@ export async function indexHtml({
             "Content-Type": "text/html; charset=UTF-8",
         },
     });
-}
-
-function buttonHtml(statefulSetState: StatefulSetState): HtmlSafeString {
-    if (statefulSetState.desiredReplicas() > 0) {
-        return html`
-            <form method="POST" action="/stop">
-                <input type="submit" value="Stop Server" />
-            </form>
-        `;
-    } else {
-        return html`
-            <form method="POST" action="/start">
-                <input type="submit" value="Start Server" />
-            </form>
-        `;
-    }
 }
 
 function debugPromise<T>(promise: Promise<T> | undefined): Promise<string> {
