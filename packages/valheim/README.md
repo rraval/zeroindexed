@@ -9,7 +9,7 @@ Builds upon the excellent [mbround18/valheim-docker][valheim-docker] image:
 
 ## Related work
 
--   [`@zeroindexed/valheimctl-worker`][valheimctl-worker]: a web UI to control your Valheim server and automatically turn it off when it is idle.
+-   [`@zeroindexed/valheimctl-worker`][valheimctl-worker]: a web UI to control your Valheim server and automatically turn it off when it is idle (https://valheimctl.zeroindexed.com is a real world deployment).
 -   [`@zeroindexed/valheimctl`][valheimctl]: a Pulumi package to deploy `@zeroindexed/valheimctl-worker`.
 -   [Real world usage][usage] of this package to host the `valheim.zeroindexed.com` server.
 
