@@ -157,7 +157,7 @@ So besides being unstandardized, user ID comments are simply the wrong tool for 
 
 # Takeaways
 
-Just generate a separate PGP `mainkey` for this specific purpose. Give it a distinct user ID for quick identification, I used [a plus sign on Gm                    ail to mark the email address][gmail-plus]. Consider if this `mainkey` even needs to be published on public keyservers, I did not bother since this key is for private use and does not represent a person.
+Just generate a separate PGP `mainkey` for this specific purpose. Give it a distinct user ID for quick identification, I used [a plus sign on Gmail to mark the email address][gmail-plus]. Consider if this `mainkey` even needs to be published on public keyservers, I did not bother since this key is for private use and does not represent a person.
 
 In May 2021, trying to use subkeys would be actively harmful. If the subkey were published alongside your existing `mainkey`, implementations would implicitly use it to encrypt communications intended for you. This adds additional awkwardness to the poor UX that PGP email already suffers.
 
