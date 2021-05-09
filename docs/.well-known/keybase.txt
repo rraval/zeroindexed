@@ -1,0 +1,72 @@
+==================================================================
+https://keybase.io/rraval
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://zeroindexed.com
+  * I am rraval (https://keybase.io/rraval) on keybase.
+  * I have a public key with fingerprint D7C7 F570 8E5A AFAC E0ED  8D4C 5D18 C315 6914 2F5F
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "0101c83b1af6ba36ba96b64e56cb44b39582a283fb87c57d5b80dff360aeb319aa230a",
+      "fingerprint": "d7c7f5708e5aaface0ed8d4c5d18c31569142f5f",
+      "host": "keybase.io",
+      "key_id": "5d18c31569142f5f",
+      "kid": "0101c83b1af6ba36ba96b64e56cb44b39582a283fb87c57d5b80dff360aeb319aa230a",
+      "uid": "00bed9885b64e6f5efa64c0452976300",
+      "username": "rraval"
+    },
+    "service": {
+      "hostname": "zeroindexed.com",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 1
+  },
+  "ctime": 1620586347,
+  "expire_in": 157680000,
+  "prev": "73156f026755434600f57794c9b74e6f900d1e3e66170f914d536ea9b7a74488",
+  "seqno": 18,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+-----BEGIN PGP MESSAGE-----
+
+owGtUntQVFUYX3CVFVlCrTVMJ7iELxDP3fsmUUoKBiNMB3yALvdx7nJlX9xdlods
+Iw4w0MJgEdrgIMVIARMDmoU5IwSNOzhQkWQ+wFTQMad4ikM2zdS9pv/1Z2fmzJnz
+fb/f73zf73xH9Qs0Oj9m5zS7Vyo94DfwgNNkfbSp6hDC2YVCJPYQkgOfHNAiQKfL
+lCMJSCwCUIDyNMahrEhyLKZshuRIHBIkz+E4hzEEbWSNNCZyNMUTlEBwNBBEESMB
+CzkMZVjWiAEWiUZEyWaGskOWbC5FVqB4SiQoQEOCZUWWhwAKtIDzhIDSPIYSJIPi
+RpEQFWK23akylOI41gljJLsSUy6mJ+X9B/5/rjvvXznAQYGhaULVIEUCiiyJ8wAn
+jAxFYgCoQCeUbawVKmhZZt2sBfFEI0rMLfFQtVXt42m+CMp2ySbAAijE8HarQnbI
+dpedt1uUZLbL5XDGqmRXoUNF50PO9FTHxCk0xUiF4YayU7LbkFhUQfIuSRVGSSMg
+aBLDqWgEFjgkGZokFUFQJA2Upb4D3YokpVom7gNGkiIIHMNJAJTfoBicZzhKbZAB
+QEAhBkkSpYComCsQGAlZJctSOE7TiNpars2uiNNKoaxZEXVKZhvrypMh4gms9Me0
+Gj+dZrUhXKsviozSJSckjRqX1T+bvoX+6uhpAheHPIvUHQ/ReK3jd4uos6/0lX09
+OqjbXpHbHz924fbKqoGXb9ZdCd8f57PsEosv/yWfTkh/pGfumDZ98LH7pRbDudIl
+bWEj7o7JEz+AO56O9UOnfu+OS3sBnF4cUR4YfSlxqv61hjr7hs+SjHMOr+5YccXk
+9I33rhgyunvMXVcvby0Jfm75kCEgq7/HkNl46cTV9IGqoLDQRfnWvX1vzmlDtwUT
+8x7aMJgTQqwN9iQcTz183T9+6vzqtOpPDmxscU7cetT3RtfQhs7J2iy/lqg9Jdrc
+puHvpr9YOfPhlh89YMKXkjbS+PCd6y+O3n879fCq4aDQ1s7cXxltlbvKu/lMes0f
+36cmL9li3dgbXz0yGOlggmzra4wnv93xc4QvYE07WbBuR1xXl9uF/VIRmxNYPlB7
+atf7Sxt674677i1fcWR4QqjdZhj6qTKxtwNcbEz13822fRrxrvlM9sA3GfXXJtqX
+Gmytm79qtxjGb+b9WTD2INE8W7rKi+F9ISkH93gL9Vx/XliEbvZe5aLbk1hTc9/W
+t/KPtTt2twl/d549X5YV9vl0efiaV9fJLTbtTlPmWHDGipmY7XNNKQubLUTJ6+fm
+Z3zdxR608LeIqLW2lmv7qSNeWJY02+NdkPy4e8bKYdWCvu7iwcfFLkvmvqMXbui+
+rJnWR/oKgnIbAruQ2rDmZb5bDwPum5+fr3GfnGr9Bw==
+=Cs5G
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/rraval
+
+==================================================================

@@ -9,6 +9,7 @@ rss: feed
 
 theme: minima
 show_excerpts: true
+include: [".well-known"]
 plugins:
   - jekyll-feed
 
