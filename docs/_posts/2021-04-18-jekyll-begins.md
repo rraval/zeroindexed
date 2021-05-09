@@ -14,5 +14,11 @@ Besides the usual first blog post drivel, this post accomplishes two additional 
 1. It demonstrates that Jekyll is properly configured to extract excerpts and put that content on the home page.
 2. It forms the starting point of a personal challenge. It's 2021-04-18, let's see how long and how many system transitions the "permalink" of <https://zeroindexed.com/jekyll-begins> can survive.
 
+# Changelog
+
+2021-05-08: Added this changelog.
+
+2021-04-18: Published.
+
 [sagan]: https://www.youtube.com/watch?v=7s664NsLeFM
 [yak]: http://www.catb.org/~esr/jargon/html/Y/yak-shaving.html
