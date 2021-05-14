@@ -1,3 +1,6 @@
+/.nix
+/.direnv
+/.envrc
 /packages/*/dist
 /packages/*/tsconfig.tsbuildinfo
 
