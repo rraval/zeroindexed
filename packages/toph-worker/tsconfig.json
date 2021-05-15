@@ -1,0 +1,11 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "outDir": "dist",
+        "rootDir": "src",
+        "target": "es2016",
+        "lib": ["es2016", "webworker"],
+        "types": ["@cloudflare/workers-types"]
+    },
+    "references": [{"path": "../binutil"}]
+}
