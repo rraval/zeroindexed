@@ -9,6 +9,7 @@ export function makeKubernetes(
 ): {
     cluster: gcp.container.Cluster;
     provider: k8s.Provider;
+    kubeconfig: pulumi.Output<string>;
 } {
     const cluster = new gcp.container.Cluster(
         "kubernetes-cluster",
@@ -31,12 +32,11 @@ export function makeKubernetes(
         {protect: true},
     );
 
-    const provider = new k8s.Provider("kubernetes-provider", {
-        kubeconfig: pulumi
-            .all([cluster.name, cluster.endpoint, cluster.masterAuth])
-            .apply(([name, endpoint, masterAuth]) => {
-                const context = `${gcp.config.project}_${gcp.config.zone}_${name}`;
-                return `apiVersion: v1
+    const kubeconfig = pulumi
+        .all([cluster.name, cluster.endpoint, cluster.masterAuth])
+        .apply(([name, endpoint, masterAuth]) => {
+            const context = `${gcp.config.project}_${gcp.config.zone}_${name}`;
+            return `apiVersion: v1
 clusters:
 - cluster:
     certificate-authority-data: ${masterAuth.clusterCaCertificate}
@@ -61,8 +61,11 @@ users:
         token-key: '{.credential.access_token}'
       name: gcp
 `;
-            }),
+        });
+
+    const provider = new k8s.Provider("kubernetes-provider", {
+        kubeconfig,
     });
 
-    return {cluster, provider};
+    return {cluster, provider, kubeconfig};
 }

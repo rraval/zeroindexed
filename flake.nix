@@ -25,6 +25,8 @@
         export PULUMI_HOME="$ZEROINDEXED_CHECKOUT/.nix/pulumi"
         export PULUMI_PREFER_YARN=true
 
+        export KUBECONFIG="$ZEROINDEXED_CHECKOUT/.nix/kubeconfig"
+
         GCLOUD_KEY="$ZEROINDEXED_CHECKOUT/.nix/gcloud-key.json"
         if [[ -e "$GCLOUD_KEY" ]]; then
             export CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE="$GCLOUD_KEY"

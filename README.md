@@ -56,7 +56,16 @@ Create a service account key and put the key in
 `$ZEROINDEXED_CHECKOUT/.nix/gcloud-key.json`:
 https://console.cloud.google.com/iam-admin/serviceaccounts
 
+### kubectl
+
+Generate a configuration file:
+
+```
+$ pulumi -C packages/pulumi stack --stack gcloud --show-secrets output kubeconfig > .nix/kubeconfig
+```
+
 [nix]: https://nixos.org/download.html#nix-quick-install
 [nix-direnv]: https://github.com/nix-community/nix-direnv#installation
 [rravalBox]: https://github.com/rraval/nix/commit/4099f6375a6bee12091b54ac62736916d8bdecbf
 [nix-flake]: https://nixos.wiki/wiki/Flakes
+[pulumi]: https://www.pulumi.com/
