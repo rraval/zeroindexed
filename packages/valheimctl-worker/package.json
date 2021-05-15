@@ -7,7 +7,9 @@
     "author": "Ronuk Raval <ronuk.raval@gmail.com>",
     "license": "MIT",
     "main": "dist/index.js",
-    "files": ["dist/*"],
+    "files": [
+        "dist/*"
+    ],
     "devDependencies": {
         "@cloudflare/workers-types": "^2.2.1",
         "@cloudflare/wrangler": "^1.16.0",

@@ -51,7 +51,7 @@ This workers script is configured via [environment variables and workers KV bind
     -   `{apiGroups: ["apps"], verbs: ["get"], resources: ["statefulsets"], resourceNames: ["..."]}` where `"..."` is the name of the stateful set specified by `VALHEIMCTL_STATEFUL_SET_NAME`. This allows the UI to query the desired and current number of replicas.
     -   `{apiGroups: ["apps"], verbs: ["patch"], resources: ["statefulsets/scale"], resourceNames: ["..."]}` where `"..."` is the name of the stateful set specified by `VALHEIMCTL_STATEFUL_SET_NAME`. This allows the UI start and stop buttons to scale the stateful set and thus actually start and stop the pod.
 
-- `VALHEIMCTL_PASSWORD`: Optional, but highly recommended. If specified, the web interface will demand a password using [HTTP basic authentication][basic-auth] (the username does not matter). If left unspecified, anyone with the URL can manipulate your cluster state!
+-   `VALHEIMCTL_PASSWORD`: Optional, but highly recommended. If specified, the web interface will demand a password using [HTTP basic authentication][basic-auth] (the username does not matter). If left unspecified, anyone with the URL can manipulate your cluster state!
 
 [valheimctl]: ../valheimctl
 [basic-auth]: https://en.wikipedia.org/wiki/Basic_access_authentication

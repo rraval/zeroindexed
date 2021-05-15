@@ -7,7 +7,7 @@ JavaScript packages are published under the `@zeroindexed/` namespace on NPM.
 ## Development
 
 Install [`nix`][nix] and [`nix-direnv`][nix-direnv] (which are part of the
-[`rravalBox` nix configuration][rravalBox], so that comes for free if you're
+[`rravalBox` nix configuration][rravalbox], so that comes for free if you're
 using it).
 
 Ensure that your `nix` config supports [`nix flake`][nix-flake].
@@ -66,6 +66,6 @@ $ pulumi -C packages/pulumi stack --stack gcloud --show-secrets output kubeconfi
 
 [nix]: https://nixos.org/download.html#nix-quick-install
 [nix-direnv]: https://github.com/nix-community/nix-direnv#installation
-[rravalBox]: https://github.com/rraval/nix/commit/4099f6375a6bee12091b54ac62736916d8bdecbf
+[rravalbox]: https://github.com/rraval/nix/commit/4099f6375a6bee12091b54ac62736916d8bdecbf
 [nix-flake]: https://nixos.wiki/wiki/Flakes
 [pulumi]: https://www.pulumi.com/

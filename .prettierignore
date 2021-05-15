@@ -1,3 +1,5 @@
+/.nix
+/.direnv
 Pulumi.yaml
 Pulumi.*.yaml
 /docs
