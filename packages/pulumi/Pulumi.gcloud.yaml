@@ -20,3 +20,4 @@ config:
   zeroindexed:valheimWebhookUrl:
     secure: v1:m2TduZBnCYY3Ealh:Fy1ByIIj3olP+XkzZpKBih3A6eaYNnPZYY+GbsszgjlzE7h+cs8lcQtGSqFY6Fbg9Zql+QoXIuvAeDHssYYt2CSKnWrJVLFiE1Sr/ol8xdMvcLy1bj0XPa+5B0VP0CIHaU6TI/3DMQaTkABAf6E1mASW6nPKP9wkZgCptAWDUX7IoMnIEJ9Vuw==
   zeroindexed:valheimWorldName: WarRoom
+  zeroindexed:tophTrackingId: UA-197056272-1

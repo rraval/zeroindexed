@@ -1,0 +1,19 @@
+{
+    "name": "@zeroindexed/toph-pulumi",
+    "version": "0.1.0",
+    "description": "Pulumi deployment for privacy preserving analytics",
+    "repository": "https://github.com/rraval/zeroindexed",
+    "homepage": "https://github.com/rraval/zeroindexed/packages/toph-pulumi",
+    "author": "Ronuk Raval <ronuk.raval@gmail.com>",
+    "license": "MIT",
+    "main": "dist/index.js",
+    "typings": "dist/index.d.js",
+    "dependencies": {
+        "@pulumi/cloudflare": "~3.0.0",
+        "@pulumi/pulumi": "~3.0.0",
+        "@zeroindexed/toph-worker": "^0.1.0"
+    },
+    "scripts": {
+        "prepublishOnly": "tsc -b ."
+    }
+}

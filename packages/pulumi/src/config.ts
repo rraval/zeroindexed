@@ -17,6 +17,9 @@ export interface Config {
         password: pulumi.Output<string>;
         webhookUrl: pulumi.Output<string> | undefined;
     };
+    toph: {
+        trackingId: string;
+    };
 }
 
 // config.requireObject doesn't actually validate types, so write things out
@@ -41,6 +44,9 @@ export const Config = {
                 worldName: config.require("valheimWorldName"),
                 password: config.requireSecret("valheimPassword"),
                 webhookUrl: config.getSecret("valheimWebhookUrl"),
+            },
+            toph: {
+                trackingId: config.require("tophTrackingId"),
             },
         };
     },
