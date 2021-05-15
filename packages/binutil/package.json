@@ -1,0 +1,16 @@
+{
+    "name": "@zeroindexed/binutil",
+    "version": "0.1.0",
+    "description": "Binary utilities for browser, node, and cloudflare worker runtimes",
+    "repository": "https://github.com/rraval/zeroindexed",
+    "homepage": "https://github.com/rraval/zeroindexed/packages/binutil",
+    "author": "Ronuk Raval <ronuk.raval@gmail.com>",
+    "license": "MIT",
+    "main": "dist/index.js",
+    "files": [
+        "dist/*"
+    ],
+    "scripts": {
+        "prepublishOnly": "tsc -b ."
+    }
+}
