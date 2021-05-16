@@ -1,6 +1,6 @@
 {
     "name": "@zeroindexed/toph-pulumi",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "description": "Pulumi deployment for privacy preserving analytics",
     "repository": "https://github.com/rraval/zeroindexed",
     "homepage": "https://github.com/rraval/zeroindexed/packages/toph-pulumi",
