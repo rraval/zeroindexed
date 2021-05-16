@@ -1,4 +1,5 @@
 {
+    "private": true,
     "name": "@zeroindexed/valheimctl-worker",
     "version": "0.1.0",
     "description": "Web UI to query and scale Valheim over the Kubernetes API",

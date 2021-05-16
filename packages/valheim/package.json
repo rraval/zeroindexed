@@ -1,4 +1,5 @@
 {
+    "private": true,
     "name": "@zeroindexed/valheim",
     "version": "0.1.0",
     "description": "Pulumi component to run Valheim in any cloud",

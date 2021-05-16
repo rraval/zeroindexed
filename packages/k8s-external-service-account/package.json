@@ -1,4 +1,5 @@
 {
+    "private": true,
     "name": "@zeroindexed/k8s-external-service-account",
     "version": "0.1.0",
     "description": "Pulumi component to export Kubernetes service account tokens for out of cluster use",
