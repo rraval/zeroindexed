@@ -1,7 +1,7 @@
 {
     "name": "@zeroindexed/toph-worker",
     "version": "0.1.0",
-    "description": "Cloudflare worker for privacy preserving analytics",
+    "description": "Privacy preserving website analytics",
     "repository": "https://github.com/rraval/zeroindexed",
     "homepage": "https://github.com/rraval/zeroindexed/packages/toph-worker",
     "author": "Ronuk Raval <ronuk.raval@gmail.com>",
