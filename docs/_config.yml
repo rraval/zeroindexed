@@ -16,6 +16,12 @@ plugins:
 defaults:
   - scope:
       path: ""
+      type: posts
     values:
       layout: post
       excerpt_separator: <!--more-->
+  - scope:
+      path: ""
+      type: pages
+    values:
+      layout: page
