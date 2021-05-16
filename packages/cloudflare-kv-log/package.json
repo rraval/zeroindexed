@@ -4,7 +4,7 @@
     "version": "0.1.0",
     "description": "Minimal logging backed by Cloudflare workers KV",
     "repository": "https://github.com/rraval/zeroindexed",
-    "homepage": "https://github.com/rraval/zeroindexed/packages/cloudflare-kv-log",
+    "homepage": "https://github.com/rraval/zeroindexed/tree/master/packages/cloudflare-kv-log",
     "author": "Ronuk Raval <ronuk.raval@gmail.com>",
     "license": "MIT",
     "main": "dist/index.js",

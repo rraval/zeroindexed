@@ -4,7 +4,7 @@
     "version": "0.1.0",
     "description": "Pulumi package for custom domains on GitHub Pages via Cloudflare DNS",
     "repository": "https://github.com/rraval/zeroindexed",
-    "homepage": "https://github.com/rraval/zeroindexed/packages/cloudflare-github-pages",
+    "homepage": "https://github.com/rraval/zeroindexed/tree/master/packages/cloudflare-github-pages",
     "author": "Ronuk Raval <ronuk.raval@gmail.com>",
     "license": "MIT",
     "main": "dist/index.js",

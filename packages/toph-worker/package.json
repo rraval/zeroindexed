@@ -3,7 +3,7 @@
     "version": "1.0.1",
     "description": "Privacy preserving website analytics",
     "repository": "https://github.com/rraval/zeroindexed",
-    "homepage": "https://github.com/rraval/zeroindexed/packages/toph-worker",
+    "homepage": "https://github.com/rraval/zeroindexed/tree/master/packages/toph-worker",
     "author": "Ronuk Raval <ronuk.raval@gmail.com>",
     "license": "MIT",
     "main": "dist/index.js",

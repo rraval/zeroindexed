@@ -4,7 +4,7 @@
     "version": "0.1.0",
     "description": "Pulumi component to run Valheim in any cloud",
     "repository": "https://github.com/rraval/zeroindexed",
-    "homepage": "https://github.com/rraval/zeroindexed/packages/valheim",
+    "homepage": "https://github.com/rraval/zeroindexed/tree/master/packages/valheim",
     "author": "Ronuk Raval <ronuk.raval@gmail.com>",
     "license": "MIT",
     "main": "dist/index.js",

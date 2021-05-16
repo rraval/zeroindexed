@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "Pulumi deployment for privacy preserving analytics",
     "repository": "https://github.com/rraval/zeroindexed",
-    "homepage": "https://github.com/rraval/zeroindexed/packages/toph-pulumi",
+    "homepage": "https://github.com/rraval/zeroindexed/tree/master/packages/toph-pulumi",
     "author": "Ronuk Raval <ronuk.raval@gmail.com>",
     "license": "MIT",
     "main": "dist/index.js",

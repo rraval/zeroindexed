@@ -4,7 +4,7 @@
     "version": "0.1.0",
     "description": "Pulumi component to export Kubernetes service account tokens for out of cluster use",
     "repository": "https://github.com/rraval/zeroindexed",
-    "homepage": "https://github.com/rraval/zeroindexed/packages/k8s-external-service-account",
+    "homepage": "https://github.com/rraval/zeroindexed/tree/master/packages/k8s-external-service-account",
     "author": "Ronuk Raval <ronuk.raval@gmail.com>",
     "license": "MIT",
     "main": "dist/index.js",
