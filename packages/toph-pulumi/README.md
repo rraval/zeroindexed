@@ -29,6 +29,10 @@ new Toph("toph", {
     // to your usecase and see the `toph-worker` documentation.
     defaultSessionExpirationSeconds: 60 * 60 * 2, // 2 hours
     defaultSessionExtensionSeconds: 60 * 20, // 20 minutes
+
+    // Makes visiting https://toph.zeroindexed.com redirect to
+    // https://zeroindexed.com/privacy. This parameter is optional.
+    rootRedirect: "https://zeroindexed.com/privacy",
 });
 ```
 

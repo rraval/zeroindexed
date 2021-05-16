@@ -26,6 +26,7 @@ interface TophConfig {
     trackingId: string;
     defaultSessionExpiration: Expiration;
     defaultSessionExtension: Extension;
+    rootRedirect: string | null;
 }
 
 const TophConfig = {
@@ -56,11 +57,17 @@ const TophConfig = {
             throw new Error("KV is not an object");
         }
 
+        let rootRedirect: string | null = null;
+        if (typeof env["ROOT_REDIRECT"] === "string") {
+            rootRedirect = env["ROOT_REDIRECT"];
+        }
+
         return {
             kv: kv as KVNamespace,
             trackingId,
             defaultSessionExpiration,
             defaultSessionExtension,
+            rootRedirect,
         };
     },
 };
@@ -81,6 +88,22 @@ addEventListener("fetch", (event) => {
 async function onFetch(request: Request): Promise<Response> {
     const config = TophConfig.fromGlobalThis();
     const url = new URL(request.url);
+
+    if (url.pathname === "/") {
+        if (config.rootRedirect == null) {
+            return buildTextResponse({
+                status: 404,
+                body: "No ROOT_REDIRECT set",
+            });
+        } else {
+            return new Response("", {
+                status: 302,
+                headers: {
+                    "Location": config.rootRedirect,
+                },
+            });
+        }
+    }
 
     if (url.pathname === "/pageview") {
         const pageView = PageViewRequest.fromRequest(request, {

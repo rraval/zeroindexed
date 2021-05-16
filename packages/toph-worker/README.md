@@ -28,9 +28,24 @@ The `src` attribute tells the the browser to fetch the [`/pageview` API][this-ap
 
 ### API
 
-Toph supports a single endpoint, `/pageview`, which sends a [`t=pageview` hit][ga-pageview] to Google Universal Analytics.
+Toph supports a small HTTP API:
 
-`/pageview` does not care what HTTP method it was invoked with, `GET`, `POST`, `PUT`, etc. are all supported.
+-   `/`: intended to redirect curious visitors to a URL of your choosing, like a privacy policy.
+-   `/pageview`: collects page view hits and forwards them to Google Universal Analytics.
+
+---
+
+The `/` API will issue an HTTP 302 redirect to the configured `ROOT_REDIRECT` (see [deployment][this-deployment]).
+
+This environment variable is optional, not specifying it will result in `/` responded with HTTP 404.
+
+`/` does not distinguish what HTTP method it was invoked with.
+
+---
+
+`/pageview` sends a [`t=pageview` hit][ga-pageview] to Google Universal Analytics.
+
+`/pageview` does not distinguish what HTTP method it was invoked with.
 
 `/pageview` supports optional parameters passed as query parameters in the URL:
 
@@ -57,10 +72,11 @@ The related package [`@zeroindexed/toph-pulumi`][toph-pulumi] is a [Pulumi][pulu
 
 If you must do things manually, start by [downloading the bundled script][unpkg-toph-worker] and uploading it as a Cloudflare workers script under your own account. The following environment variables are required:
 
-- `KV`: A KV namespace binding to store unique visitor information.
-- `TRACKING_ID`: Google Universal Analytics ID to send hits to.
-- `DEFAULT_SESSION_EXPIRATION_SECONDS`: number of seconds before a unique visitor session ends.
-- `DEFAULT_SESSION_EXTENSION_SECONDS`: number of seconds before a visitor session refreshes.
+-   `KV`: Required, a KV namespace binding to store unique visitor information.
+-   `TRACKING_ID`: Required, Google Universal Analytics ID to send hits to.
+-   `DEFAULT_SESSION_EXPIRATION_SECONDS`: Required, number of seconds before a unique visitor session ends.
+-   `DEFAULT_SESSION_EXTENSION_SECONDS`: Required, number of seconds before a visitor session refreshes.
+-   `ROOT_REDIRECT`: Optional, URL that `/` will redirect to.
 
 ![Screenshot of an example Cloudflare workers configuration](screenshot.png)
 
@@ -128,7 +144,6 @@ If your website is popular, this writes per day limit is likely going to be the 
 
 -   Deal with the fact that you'll miss analytics events during these bouts of popularity.
 -   Pay the $5/month fixed cost (and whatever variable cost) to upgrade to the workers paid plan with at least 1 million writes per month. This cost can be amortized across other projects that also utilize Cloudflare workers as their deployment mechanism (**cough** [like a controller UI for valheim][valheimctl-worker] **cough**).
-
 
 [cloudflare-workers-analytics]: https://github.com/cloudflare/workers-google-analytics
 [cloudflare-workers-free-tier]: https://developers.cloudflare.com/workers/platform/limits#worker-limits

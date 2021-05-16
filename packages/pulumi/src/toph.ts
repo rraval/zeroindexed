@@ -10,5 +10,6 @@ export function makeToph(config: Config): void {
         trackingId: config.toph.trackingId,
         defaultSessionExpirationSeconds: 60 * 60 * 2, // 2 hours
         defaultSessionExtensionSeconds: 60 * 20, // 20 minutes
+        rootRedirect: `https://${config.cloudflare.zone}/privacy`,
     });
 }

@@ -15,6 +15,7 @@ export interface TophArgs {
     trackingId: pulumi.Input<string>;
     defaultSessionExtensionSeconds: pulumi.Input<number>;
     defaultSessionExpirationSeconds: pulumi.Input<number>;
+    rootRedirect?: pulumi.Input<string>;
 }
 
 export class Toph extends pulumi.ComponentResource {
@@ -31,25 +32,34 @@ export class Toph extends pulumi.ComponentResource {
             {parent: this},
         );
 
+        const plainTextBindings: Array<cloudflare.types.input.WorkerScriptPlainTextBinding> = [
+            {
+                name: "TRACKING_ID",
+                text: args.trackingId,
+            },
+            {
+                name: "DEFAULT_SESSION_EXPIRATION_SECONDS",
+                text: `${args.defaultSessionExpirationSeconds}`,
+            },
+            {
+                name: "DEFAULT_SESSION_EXTENSION_SECONDS",
+                text: `${args.defaultSessionExtensionSeconds}`,
+            },
+        ];
+
+        if (args.rootRedirect != null) {
+            plainTextBindings.push({
+                name: "ROOT_REDIRECT",
+                text: args.rootRedirect,
+            });
+        }
+
         const workerScript = new cloudflare.WorkerScript(
             "toph",
             {
                 name: pulumi.concat(args.subdomain, "-worker"),
                 content: WORKER_SCRIPT,
-                plainTextBindings: [
-                    {
-                        name: "TRACKING_ID",
-                        text: args.trackingId,
-                    },
-                    {
-                        name: "DEFAULT_SESSION_EXPIRATION_SECONDS",
-                        text: `${args.defaultSessionExpirationSeconds}`,
-                    },
-                    {
-                        name: "DEFAULT_SESSION_EXTENSION_SECONDS",
-                        text: `${args.defaultSessionExtensionSeconds}`,
-                    },
-                ],
+                plainTextBindings,
                 kvNamespaceBindings: [
                     {
                         name: "KV",
