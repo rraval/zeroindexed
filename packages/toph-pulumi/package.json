@@ -15,5 +15,7 @@
     },
     "scripts": {
         "prepublishOnly": "tsc -b ."
-    }
+    },
+    "publishConfig": {"access": "public"},
+    "gitHead": "6326e6c040d4deeca252d021188cd446a801e688"
 }
