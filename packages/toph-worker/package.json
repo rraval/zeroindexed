@@ -1,6 +1,6 @@
 {
     "name": "@zeroindexed/toph-worker",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "description": "Privacy preserving website analytics",
     "repository": "https://github.com/rraval/zeroindexed",
     "homepage": "https://github.com/rraval/zeroindexed/packages/toph-worker",

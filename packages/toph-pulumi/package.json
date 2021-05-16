@@ -11,7 +11,7 @@
     "dependencies": {
         "@pulumi/cloudflare": "~3.0.0",
         "@pulumi/pulumi": "~3.0.0",
-        "@zeroindexed/toph-worker": "^0.1.0"
+        "@zeroindexed/toph-worker": "^1.0.0"
     },
     "scripts": {
         "prepublishOnly": "tsc -b ."
