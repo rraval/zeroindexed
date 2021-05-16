@@ -70,7 +70,7 @@ $ curl https://toph.zeroindexed.com/pageview?expiration=7200&extension=1200
 
 The related package [`@zeroindexed/toph-pulumi`][toph-pulumi] is a [Pulumi][pulumi] package that makes deployment trivial. Use it if you can.
 
-If you must do things manually, start by [downloading the bundled script][unpkg-toph-worker] and uploading it as a Cloudflare workers script under your own account. The following environment variables are required:
+If you must do things manually, start by [downloading the bundled script][unpkg-toph-worker] and uploading it as a Cloudflare workers script under your own account. Toph is configured via environment variables:
 
 -   `KV`: Required, a KV namespace binding to store unique visitor information.
 -   `TRACKING_ID`: Required, Google Universal Analytics ID to send hits to.
