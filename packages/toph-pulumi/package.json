@@ -1,5 +1,4 @@
 {
-    "private": true,
     "name": "@zeroindexed/toph-pulumi",
     "version": "0.1.0",
     "description": "Pulumi deployment for privacy preserving analytics",
