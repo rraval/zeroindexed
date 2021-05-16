@@ -124,7 +124,7 @@ All the established players ended up failing some of these criteria:
 
 Toph makes extensive use of the [Cloudflare workers free tier][cloudflare-workers-free-tier] to minimize costs. However it does issue a write per unique visitor as well as for session extension, so it is possible to run into the limits of 1000 writes per day.
 
-If your website if popular, this writes per day limit is likely going to be the limiting factor. Your options are:
+If your website is popular, this writes per day limit is likely going to be the limiting factor. Your options are:
 
 -   Deal with the fact that you'll miss analytics events during these bouts of popularity.
 -   Pay the $5/month fixed cost (and whatever variable cost) to upgrade to the workers paid plan with at least 1 million writes per month. This cost can be amortized across other projects that also utilize Cloudflare workers as their deployment mechanism (**cough** [like a controller UI for valheim][valheimctl-worker] **cough**).
