@@ -55,7 +55,14 @@ $ curl https://toph.zeroindexed.com/pageview?expiration=7200&extension=1200
 
 The related package [`@zeroindexed/toph-pulumi`][toph-pulumi] is a [Pulumi][pulumi] package that makes deployment trivial. Use it if you can.
 
-FIXME(#7): document how to deploy without Pulumi.
+If you must do things manually, start by [downloading the bundled script][unpkg-toph-worker] and uploading it as a Cloudflare workers script under your own account. The following environment variables are required:
+
+- `KV`: A KV namespace binding to store unique visitor information.
+- `TRACKING_ID`: Google Universal Analytics ID to send hits to.
+- `DEFAULT_SESSION_EXPIRATION_SECONDS`: number of seconds before a unique visitor session ends.
+- `DEFAULT_SESSION_EXTENSION_SECONDS`: number of seconds before a visitor session refreshes.
+
+![Screenshot of an example Cloudflare workers configuration](screenshot.png)
 
 ## Implementation
 
@@ -122,6 +129,7 @@ If your website if popular, this writes per day limit is likely going to be the 
 -   Deal with the fact that you'll miss analytics events during these bouts of popularity.
 -   Pay the $5/month fixed cost (and whatever variable cost) to upgrade to the workers paid plan with at least 1 million writes per month. This cost can be amortized across other projects that also utilize Cloudflare workers as their deployment mechanism (**cough** [like a controller UI for valheim][valheimctl-worker] **cough**).
 
+
 [cloudflare-workers-analytics]: https://github.com/cloudflare/workers-google-analytics
 [cloudflare-workers-free-tier]: https://developers.cloudflare.com/workers/platform/limits#worker-limits
 [cloudflare-workers-kv]: https://developers.cloudflare.com/workers/learning/how-kv-works
@@ -133,6 +141,7 @@ If your website if popular, this writes per day limit is likely going to be the 
 [ga4-measurement-protocol]: https://developers.google.com/analytics/devguides/collection/protocol/ga4
 [http-referer]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer
 [plausible-unique-visitors]: https://plausible.io/data-policy#how-we-count-unique-users-without-cookies
+[pulumi]: https://www.pulumi.com/
 [samkelleher-worker-analytics]: https://github.com/samkelleher/cloudflare-worker-google-analytics
 [script-async]: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#attr-async
 [script-referrerpolicy]: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#attr-referrerpolicy
@@ -143,5 +152,6 @@ If your website if popular, this writes per day limit is likely going to be the 
 [this-unique-counting]: #counting-unique-visitors
 [this-usage]: #usage
 [toph-pulumi]: ../toph-pulumi
+[unpkg-toph-worker]: https://unpkg.com/@zeroindexed/toph-worker
 [uuidv4]: https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)
 [valheimctl-worker]: ../valheimctl-worker
