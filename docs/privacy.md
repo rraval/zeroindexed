@@ -14,4 +14,4 @@ This site is hosted by GitHub pages, see their [privacy policy][github-pages-pri
 [cloudflare-privacy]: https://www.cloudflare.com/privacypolicy/
 [cloudflare-workers]: https://workers.cloudflare.com/
 [github-pages-privacy]: https://docs.github.com/en/github/site-policy/github-privacy-statement#github-pages
-[toph]: https://github.com/rraval/zeroindexed/tree/master/packages/toph-worker
+[toph]: https://github.com/rraval/zeroindexed/tree/master/packages/toph-worker#readme
