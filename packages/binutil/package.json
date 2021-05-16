@@ -12,5 +12,6 @@
     ],
     "scripts": {
         "prepublishOnly": "tsc -b ."
-    }
+    },
+    "publishConfig": {"access": "public"}
 }

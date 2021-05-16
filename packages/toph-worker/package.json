@@ -20,5 +20,6 @@
     },
     "scripts": {
         "prepublishOnly": "webpack"
-    }
+    },
+    "publishConfig": {"access": "public"}
 }
