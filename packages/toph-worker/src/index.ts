@@ -1,5 +1,6 @@
-import {ClientId} from "./client-id";
+import {ClientId, SessionConfig} from "./client-id";
 import {sendPageView} from "./ga";
+import {Expiration, Extension} from "./newtype";
 import {PageViewRequest} from "./pageview";
 
 function debugRepr(thing: unknown): string {
@@ -23,22 +24,8 @@ function buildTextResponse({status, body}: {status: number; body: string}): Resp
 interface TophConfig {
     kv: KVNamespace;
     trackingId: string;
-    defaultSessionDurationSeconds: number;
-}
-
-function asNumber(thing: unknown, source: string): number {
-    if (typeof thing === "number") {
-        return thing;
-    }
-
-    if (typeof thing === "string") {
-        const num = Number.parseInt(thing, 10);
-        if (!Number.isNaN(num)) {
-            return num;
-        }
-    }
-
-    throw new Error(`${source} is not a number`);
+    defaultSessionExpiration: Expiration;
+    defaultSessionExtension: Extension;
 }
 
 const TophConfig = {
@@ -50,9 +37,18 @@ const TophConfig = {
             throw new Error("TRACKING_ID is not a string");
         }
 
-        const defaultSessionDurationSeconds = asNumber(
-            env["DEFAULT_SESSION_DURATION_SECONDS"],
-            "DEFAULT_SESSION_DURATION_SECONDS",
+        const defaultSessionExpiration = Expiration(
+            asNumber(
+                env["DEFAULT_SESSION_EXPIRATION_SECONDS"],
+                "DEFAULT_SESSION_EXPIRATION_SECONDS",
+            ),
+        );
+
+        const defaultSessionExtension = Extension(
+            asNumber(
+                env["DEFAULT_SESSION_EXTENSION_SECONDS"],
+                "DEFAULT_SESSION_EXTENSION_SECONDS",
+            ),
         );
 
         const kv = env["KV"];
@@ -63,7 +59,8 @@ const TophConfig = {
         return {
             kv: kv as KVNamespace,
             trackingId,
-            defaultSessionDurationSeconds,
+            defaultSessionExpiration,
+            defaultSessionExtension,
         };
     },
 };
@@ -87,7 +84,8 @@ async function onFetch(request: Request): Promise<Response> {
 
     if (url.pathname === "/pageview") {
         const pageView = PageViewRequest.fromRequest(request, {
-            defaultSessionDurationSeconds: config.defaultSessionDurationSeconds,
+            defaultSessionExpiration: config.defaultSessionExpiration,
+            defaultSessionExtension: config.defaultSessionExtension,
         });
         if (pageView == null) {
             return buildTextResponse({
@@ -96,10 +94,22 @@ async function onFetch(request: Request): Promise<Response> {
             });
         }
 
-        const clientId = await ClientId.fromRequest({
+        if (pageView.sessionExtension.value >= pageView.sessionExpiration.value) {
+            return buildTextResponse({
+                status: 400,
+                body: `Extension (${pageView.sessionExtension.value}) must be smaller than expiration (${pageView.sessionExpiration.value})`,
+            });
+        }
+
+        const sessionConfig = new SessionConfig({
             kv: config.kv,
+            expiration: pageView.sessionExpiration,
+            extension: pageView.sessionExtension,
+        });
+
+        const clientId = await ClientId.fromRequest({
+            sessionConfig,
             request,
-            timeoutSeconds: pageView.sessionDurationSeconds,
         });
 
         if (clientId == null) {
@@ -125,4 +135,19 @@ async function onFetch(request: Request): Promise<Response> {
         status: 404,
         body: `Unknown path: ${url.pathname}`,
     });
+}
+
+function asNumber(thing: unknown, source: string): number {
+    if (typeof thing === "number") {
+        return thing;
+    }
+
+    if (typeof thing === "string") {
+        const num = Number.parseInt(thing, 10);
+        if (!Number.isNaN(num)) {
+            return num;
+        }
+    }
+
+    throw new Error(`${source} is not a number`);
 }

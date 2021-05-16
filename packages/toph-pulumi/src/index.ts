@@ -13,7 +13,8 @@ export interface TophArgs {
     cloudflareZone: pulumi.Input<string>;
     subdomain: pulumi.Input<string>;
     trackingId: pulumi.Input<string>;
-    defaultSessionDurationSeconds: pulumi.Input<number>;
+    defaultSessionExtensionSeconds: pulumi.Input<number>;
+    defaultSessionExpirationSeconds: pulumi.Input<number>;
 }
 
 export class Toph extends pulumi.ComponentResource {
@@ -35,17 +36,26 @@ export class Toph extends pulumi.ComponentResource {
             {
                 name: pulumi.concat(args.subdomain, "-worker"),
                 content: WORKER_SCRIPT,
-                plainTextBindings: [{
-                    name: "TRACKING_ID",
-                    text: args.trackingId,
-                }, {
-                    name: "DEFAULT_SESSION_DURATION_SECONDS",
-                    text: `${args.defaultSessionDurationSeconds}`,
-                }],
-                kvNamespaceBindings: [{
-                    name: "KV",
-                    namespaceId: kv.id,
-                }],
+                plainTextBindings: [
+                    {
+                        name: "TRACKING_ID",
+                        text: args.trackingId,
+                    },
+                    {
+                        name: "DEFAULT_SESSION_EXPIRATION_SECONDS",
+                        text: `${args.defaultSessionExpirationSeconds}`,
+                    },
+                    {
+                        name: "DEFAULT_SESSION_EXTENSION_SECONDS",
+                        text: `${args.defaultSessionExtensionSeconds}`,
+                    },
+                ],
+                kvNamespaceBindings: [
+                    {
+                        name: "KV",
+                        namespaceId: kv.id,
+                    },
+                ],
             },
             {parent: this},
         );
@@ -54,7 +64,13 @@ export class Toph extends pulumi.ComponentResource {
             "toph",
             {
                 zoneId: args.cloudflareZoneId,
-                pattern: pulumi.concat("https://", args.subdomain, ".", args.cloudflareZone, "/*"),
+                pattern: pulumi.concat(
+                    "https://",
+                    args.subdomain,
+                    ".",
+                    args.cloudflareZone,
+                    "/*",
+                ),
                 scriptName: workerScript.name,
             },
             {parent: this},

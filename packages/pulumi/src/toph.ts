@@ -8,6 +8,7 @@ export function makeToph(config: Config): void {
         cloudflareZoneId: config.cloudflare.zoneId,
         subdomain: "toph",
         trackingId: config.toph.trackingId,
-        defaultSessionDurationSeconds: 60 * 60 * 2, // 2 hours
+        defaultSessionExpirationSeconds: 60 * 60 * 2, // 2 hours
+        defaultSessionExtensionSeconds: 60 * 20, // 20 minutes
     });
 }

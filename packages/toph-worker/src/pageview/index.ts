@@ -1,3 +1,5 @@
+import {Expiration, Extension} from "../newtype";
+
 export function extractAbsoluteUrl(
     possibleUrl: string | null | undefined,
 ): string | null {
@@ -39,26 +41,33 @@ export function extractDocumentLocation({
     return null;
 }
 
-export function parseIntOr(str: string | null, fallback: number): number {
+export function parseIntOr<T>(
+    map: (num: number) => T,
+    str: string | null,
+    fallback: T,
+): T {
     if (str == null) {
         return fallback;
     }
     const num = Number.parseInt(str, 10);
-    return Number.isNaN(num) ? fallback : num;
+    return Number.isNaN(num) ? fallback : map(num);
 }
 
 export interface PageViewRequest {
     documentLocation: string;
-    sessionDurationSeconds: number;
+    sessionExpiration: Expiration;
+    sessionExtension: Extension;
 }
 
 export const PageViewRequest = {
     fromRequest(
         request: Request,
         {
-            defaultSessionDurationSeconds,
+            defaultSessionExpiration,
+            defaultSessionExtension,
         }: {
-            defaultSessionDurationSeconds: number;
+            defaultSessionExpiration: Expiration;
+            defaultSessionExtension: Extension;
         },
     ): PageViewRequest | null {
         const url = new URL(request.url);
@@ -72,14 +81,22 @@ export const PageViewRequest = {
             return null;
         }
 
-        const sessionDurationSeconds = parseIntOr(
-            url.searchParams.get("duration"),
-            defaultSessionDurationSeconds,
+        const sessionExpiration = parseIntOr(
+            Expiration,
+            url.searchParams.get("expiration"),
+            defaultSessionExpiration,
+        );
+
+        const sessionExtension = parseIntOr(
+            Extension,
+            url.searchParams.get("extension"),
+            defaultSessionExtension,
         );
 
         return {
             documentLocation,
-            sessionDurationSeconds,
+            sessionExpiration,
+            sessionExtension,
         };
     },
 };
