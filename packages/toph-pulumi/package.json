@@ -1,6 +1,6 @@
 {
     "name": "@zeroindexed/toph-pulumi",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Pulumi deployment for privacy preserving analytics",
     "repository": "https://github.com/rraval/zeroindexed",
     "homepage": "https://github.com/rraval/zeroindexed/tree/master/packages/toph-pulumi",
@@ -11,11 +11,13 @@
     "dependencies": {
         "@pulumi/cloudflare": "~3.0.0",
         "@pulumi/pulumi": "~3.0.0",
-        "@zeroindexed/toph-worker": "^1.0.0"
+        "@zeroindexed/toph-worker": "^1.0.2"
     },
     "scripts": {
         "prepublishOnly": "tsc -b ."
     },
-    "publishConfig": {"access": "public"},
+    "publishConfig": {
+        "access": "public"
+    },
     "gitHead": "6326e6c040d4deeca252d021188cd446a801e688"
 }

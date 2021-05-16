@@ -1,6 +1,6 @@
 {
     "name": "@zeroindexed/binutil",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Binary utilities for browser, node, and cloudflare worker runtimes",
     "repository": "https://github.com/rraval/zeroindexed",
     "homepage": "https://github.com/rraval/zeroindexed/tree/master/packages/binutil",
@@ -13,5 +13,7 @@
     "scripts": {
         "prepublishOnly": "tsc -b ."
     },
-    "publishConfig": {"access": "public"}
+    "publishConfig": {
+        "access": "public"
+    }
 }
