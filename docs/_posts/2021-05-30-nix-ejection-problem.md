@@ -54,9 +54,9 @@ NixOS (and Nix, which is the practical underpinning that makes this all possible
 
 ### On Gentoo
 
-An earlier version of this article lumped Gentoo in the same source-first approach as ArchLinux. Someone reached out over email and [totony on HackerNews][totony] pointed out that Portage has grown to be far more sophisticated than I gave it credit for.
+An earlier version of this article lumped Gentoo into the same source-first approach as ArchLinux. Someone reached out over email and [totony on HackerNews][totony] pointed out that Portage has grown to be far more sophisticated than I gave it credit for.
 
-Portage supports a [generalized mechanism for patching software][portage-patches] that seems like it would have worked just as well here (with even fewer lines of code if you will).
+Portage supports a [generalized mechanism for patching software][portage-patches] that seems like it would have worked just as well here (with fewer lines of code if you will).
 
 I only have a surface level understanding, but it seems like the ebuild itself cannot be patched, so there is no analogue to the [Nix override design pattern][nix-override]; meaning there is still some distinction between "package consumer" and "package developer". However, this is a pragmatic blog post motivated by a real problem, and it seems like Gentoo is quite capable of rising to the specifics of this situation. Fair play!
 
