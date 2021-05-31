@@ -19,6 +19,12 @@ I think if you asked me "how much do you care about web privacy?", I would have 
 
 Oh, and it's called Toph because [it is blind to the visitor's personal information][toph-beifong].
 
+# Changelog
+
+2021-05-30: Added this changelog.
+
+2021-05-16: Published.
+
 [cloudflare-analytics]: https://www.cloudflare.com/analytics/
 [matamo]: https://matomo.org/
 [minima-ga]: https://github.com/jekyll/minima/blob/2.5-stable/_includes/google-analytics.html
