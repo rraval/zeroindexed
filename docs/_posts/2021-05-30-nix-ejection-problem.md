@@ -24,7 +24,7 @@ On a second level, I've recently been [experimenting with NixOS as my daily driv
 
 <!--more-->
 
-Package management on Linux has a colourful history, with various distributions intermixing technology with philosophy to produce whole system configurations that real people can run on real machines with varying amounts of productivity. You have the Slackware "our packages are just tarballs you can extract over `/`", the slightly more principled dpkg and RPM's of the world, the source-first approach preferred by Gentoo and ArchLinux, and the "invent the universe to bake a pie" doctrine that is Linux From Scratch.
+Package management on Linux has a colourful history, with various distributions intermixing technology with philosophy to produce whole system configurations that real people can run on real machines with varying amounts of productivity. You have the Slackware "our packages are just tarballs you can extract over `/`", the slightly more principled dpkg and RPM's of the world, the source-first approach preferred ArchLinux, and the "invent the universe to bake a pie" doctrine that is Linux From Scratch.
 
 However, all of them share the fundamental notion of what it means to be a package: a monolithic reusable artifact that can be installed on a user's machine. (Okay, Linux From Scratch doesn't really belong in this category, but does it really belong anywhere?)
 
@@ -52,7 +52,17 @@ The JavaScript community has a good word for this kind of "stay on the beaten pa
 
 NixOS (and Nix, which is the practical underpinning that makes this all possible) present a composable solution to this package management ejection problem. And that is _interesting_!
 
-# Changelog
+### On Gentoo
+
+An earlier version of this article lumped Gentoo in the same source-first approach as ArchLinux. Someone reached out over email and [totony on HackerNews][totony] pointed out that Portage has grown to be far more sophisticated than I gave it credit for.
+
+Portage supports a [generalized mechanism for patching software][portage-patches] that seems like it would have worked just as well here (with even fewer lines of code if you will).
+
+I only have a surface level understanding, but it seems like the ebuild itself cannot be patched, so there is no analogue to the [Nix override design pattern][nix-override]; meaning there is still some distinction between "package consumer" and "package developer". However, this is a pragmatic blog post motivated by a real problem, and it seems like Gentoo is quite capable of rising to the specifics of this situation. Fair play!
+
+## Changelog
+
+2021-05-31: Added a section on Gentoo and Portage.
 
 2021-05-30: Published.
 
@@ -66,3 +76,6 @@ NixOS (and Nix, which is the practical underpinning that makes this all possible
 [arch-patch-kernel]: https://wiki.archlinux.org/title/Kernel/Arch_Build_System
 [does-not-compose]: https://github.com/rraval/zeroindexed/issues/8
 [js-eject]: https://create-react-app.dev/docs/available-scripts/#npm-run-eject
+[totony]: https://news.ycombinator.com/item?id=27346853
+[portage-patches]: https://wiki.gentoo.org/wiki//etc/portage/patches
+[nix-override]: https://nixos.org/guides/nix-pills/override-design-pattern.html
