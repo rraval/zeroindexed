@@ -99,7 +99,7 @@ async function onFetch(request: Request): Promise<Response> {
             return new Response("", {
                 status: 302,
                 headers: {
-                    "Location": config.rootRedirect,
+                    Location: config.rootRedirect,
                 },
             });
         }
