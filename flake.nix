@@ -12,6 +12,7 @@
     devShell = pkgs.mkShell {
       buildInputs = with pkgs; [
         google-cloud-sdk
+        kubectl
         nodejs
         pulumi-bin
         ruby_2_7
