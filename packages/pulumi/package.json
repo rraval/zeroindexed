@@ -4,10 +4,10 @@
     "version": "0.0.0",
     "main": "src/index.ts",
     "dependencies": {
-        "@pulumi/cloudflare": "^3.0.0",
+        "@pulumi/cloudflare": "^3.2.0",
         "@pulumi/gcp": "^5.0.0",
-        "@pulumi/kubernetes": "^3.0.0",
-        "@pulumi/pulumi": "^3.0.0",
+        "@pulumi/kubernetes": "^3.5.0",
+        "@pulumi/pulumi": "^3.6.1",
         "@zeroindexed/cloudflare-github-pages": "^0.1.0",
         "@zeroindexed/toph-pulumi": "^1.0.0",
         "@zeroindexed/valheim": "^0.1.0",

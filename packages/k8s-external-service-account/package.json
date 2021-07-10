@@ -13,8 +13,8 @@
         "dist/*"
     ],
     "dependencies": {
-        "@pulumi/kubernetes": "~3.0.0",
-        "@pulumi/pulumi": "~3.0.0"
+        "@pulumi/kubernetes": "~3.5.0",
+        "@pulumi/pulumi": "~3.6.1"
     },
     "scripts": {
         "prepublishOnly": "tsc -b ."

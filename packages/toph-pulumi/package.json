@@ -9,8 +9,8 @@
     "main": "dist/index.js",
     "typings": "dist/index.d.js",
     "dependencies": {
-        "@pulumi/cloudflare": "~3.0.0",
-        "@pulumi/pulumi": "~3.0.0",
+        "@pulumi/cloudflare": "~3.2.0",
+        "@pulumi/pulumi": "~3.6.1",
         "@zeroindexed/toph-worker": "^1.1.0"
     },
     "scripts": {
