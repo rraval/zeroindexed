@@ -99,15 +99,28 @@ class FakeKV implements KVNamespace {
         return Promise.resolve();
     }
 
-    public get(key: string): KVValue<string>;
-    public get(key: string, type: "text"): KVValue<string>;
-    public get<ExpectedValue = unknown>(
-        key: string,
-        type: "json",
-    ): KVValue<ExpectedValue>;
-    public get(key: string, type: "arrayBuffer"): KVValue<ArrayBuffer>;
-    public get(key: string, type: "stream"): KVValue<ReadableStream>;
-    public get(key: string, type?: string): KVValue<unknown> {
+    get(key: string, options?: {cacheTtl?: number;}): KVValue<string>;
+    get(key: string, type: 'text'): KVValue<string>;
+    get<ExpectedValue = unknown>(key: string, type: 'json'): KVValue<ExpectedValue>;
+    get(key: string, type: 'arrayBuffer'): KVValue<ArrayBuffer>;
+    get(key: string, type: 'stream'): KVValue<ReadableStream>;
+    get(key: string, options?: {
+        type: 'text',
+        cacheTtl?: number;
+    }): KVValue<string>;
+    get<ExpectedValue = unknown>(key: string, options?: {
+        type: 'json',
+        cacheTtl?: number;
+    }): KVValue<ExpectedValue>;
+    get(key: string, options?: {
+        type: 'arrayBuffer',
+        cacheTtl?: number;
+    }): KVValue<ArrayBuffer>;
+    get(key: string, options?: {
+        type: 'stream',
+        cacheTtl?: number;
+    }): KVValue<ReadableStream>;
+    public get(key: string, type?: any): KVValue<unknown> {
         if (type !== "text") {
             throw new Error(`Unsupported type: ${type}`);
         }
