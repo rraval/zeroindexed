@@ -38,7 +38,11 @@ For more on this topic, the clearest explanation I can find is [Dave Steele's an
 
 The initial thought is to simply associate some metadata with a specially generated `subkey` that identifies it as special-only-for-explicit-personal-use. The vague hope is to prevent others from implicitly using this key when sending me encrypted email or sharing work related secrets.
 
-Unfortunately, the ecosystem doesn't support any metadata of the sort.  [GPG does not yet seem to support encrypting via a specific subkey][gpg-specific-subkey], an assertion supported by the [Debian wiki on GPG subkeys][debian-subkey]:
+Unfortunately, the ecosystem doesn't support any metadata of the sort. You can [force GPG to use a specific subkey with an explicit invocation][gpg-specific-subkey]:
+
+> When using `gpg` an exclamation mark (!) may be appended to force using the specified primary or secondary key and not to try and calculate which primary or secondary key to use.
+
+However the [default behaviour for GPG makes it easy to do the wrong thing][debian-subkey]:
 
 > If you have multiple encryption subkeys, gpg is said to encrypt only for the most recent encryption subkey and not for all known and not revoked encryption subkeys.
 
@@ -163,6 +167,8 @@ In May 2021, trying to use subkeys would be actively harmful. If the subkey were
 
 # Changelog
 
+2021-10-30: [Dave Steele](https://davesteele.github.io/) reached out over email and pointed out that GPG can indeed encrypt to an explicit subkey with an exclamation point syntax. [The earlier reference that claimed this couldn't be done](https://gpgtools.tenderapp.com/discussions/problems/8919-force-subkey-for-signing) has been removed.
+
 2021-05-09: Published.
 
 [password-management]: https://github.com/rraval/zeroindexed/issues/6
@@ -171,7 +177,7 @@ In May 2021, trying to use subkeys would be actively harmful. If the subkey were
 [key-flags]: https://datatracker.ietf.org/doc/html/rfc4880#section-5.2.3.21
 [key-flag-usage]: https://serverfault.com/a/399366
 [gpg-key-anatomy]: https://davesteele.github.io/gpg/2014/09/20/anatomy-of-a-gpg-key/
-[gpg-specific-subkey]: https://gpgtools.tenderapp.com/discussions/problems/8919-force-subkey-for-signing
+[gpg-specific-subkey]: https://www.gnupg.org/documentation/manuals/gnupg/Specify-a-User-ID.html
 [debian-subkey]: https://wiki.debian.org/Subkeys
 [openkeychain-subkey]: https://github.com/open-keychain/open-keychain/issues/2281#issuecomment-370384337
 [ml1-problem]: https://lists.gnupg.org/pipermail/gnupg-users/2011-December/043365.html
